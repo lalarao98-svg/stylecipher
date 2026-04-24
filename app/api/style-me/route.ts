@@ -15,15 +15,16 @@ const WEB_SEARCH: WebSearchTool20260209 = {
 };
 
 interface RequestBody {
-  kibbeType:   KibbeType | null;
-  colorSeason: SeasonKey | null;
-  archetypes:  string[];        // top 3 archetype names from store
-  platform:    Platform;
-  category:    Category;
-  vibes:       string[];
-  depopSize?:  string;
-  inspoImage?: string;          // base64 data URI
-  inspoMode?:  boolean;
+  kibbeType:      KibbeType | null;
+  colorSeason:    SeasonKey | null;
+  archetypes:     string[];        // top 3 archetype names from store
+  platform:       Platform;
+  category:       Category;
+  vibes:          string[];
+  depopSize?:     string;
+  depopListings?: unknown[];       // pre-fetched Depop results from /api/depop
+  inspoImage?:    string;          // base64 data URI
+  inspoMode?:     boolean;
 }
 
 export async function POST(req: NextRequest) {
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
   const {
     kibbeType, colorSeason, archetypes,
     platform, category, vibes,
-    depopSize, inspoImage, inspoMode,
+    depopSize, depopListings, inspoImage, inspoMode,
   } = body;
 
   const k = kibbeType ? KIBBE[kibbeType] : null;
@@ -53,6 +54,9 @@ export async function POST(req: NextRequest) {
     `PLATFORM: ${platform === "all" ? "Rent the Runway (rtr.com), Nuuly (nuuly.com), FashionPass (fashionpass.com)" : platform}`,
     isDepop
       ? `DEPOP: Size ${depopSize ?? "S"} US letter. Condition Good or above. Vintage sizing typically runs 1–2 sizes small — account for this. Provide exact copyable Depop search queries.`
+      : "",
+    isDepop && depopListings && depopListings.length > 0
+      ? `LIVE DEPOP LISTINGS (prioritise these when available):\n${JSON.stringify(depopListings.slice(0, 20), null, 2)}`
       : "",
     category !== "all" ? `CATEGORY: ${category}` : "",
     vibeStr ? `VIBE / OCCASION: ${vibeStr}` : "",

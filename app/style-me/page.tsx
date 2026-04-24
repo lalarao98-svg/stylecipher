@@ -34,6 +34,22 @@ export default function StyleMePage() {
     setLoading(true);
     setError(null);
     try {
+      // For Depop, pre-fetch live listings to ground Claude's picks in real inventory
+      let depopListings: unknown[] | undefined;
+      if (platform === "Depop") {
+        const query = [...top3Names.slice(0, 2), category !== "all" ? category : "", vibes[0] ?? ""]
+          .filter(Boolean).join(" ").trim() || "vintage";
+        const depopRes = await fetch("/api/depop", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, size: depopSize || undefined, limit: 30 }),
+        });
+        if (depopRes.ok) {
+          const depopData = await depopRes.json();
+          depopListings = Array.isArray(depopData?.objects) ? depopData.objects : [];
+        }
+      }
+
       const res = await fetch("/api/style-me", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -45,6 +61,7 @@ export default function StyleMePage() {
           category,
           vibes,
           depopSize,
+          depopListings,
         }),
       });
       if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -115,7 +132,7 @@ export default function StyleMePage() {
             onClick={handleStyleMe}
             disabled={loading || (!selK && !selS)}
           >
-            {loading ? "Searching..." : "Style Me"}
+            {loading ? (platform === "Depop" ? "Fetching listings…" : "Searching…") : "Style Me"}
           </button>
           {!selK && !selS && (
             <p className="t-body" style={{ color: "#A89A88" }}>
@@ -172,6 +189,11 @@ function ResultCard({ item }: { item: StyleMeResult }) {
       <p className="t-body">{item.brand}</p>
       {item.era && <p className="t-body" style={{ color: "#A87828" }}>{item.era}</p>}
       <p className="t-body" style={{ marginTop: 4, color: "#8A7A68", fontStyle: "italic" }}>{item.match}</p>
+      {item.search_query && (
+        <p className="t-body" style={{ marginTop: 4, fontFamily: "monospace", fontSize: 11, color: "#5A6012", wordBreak: "break-all" }}>
+          &ldquo;{item.search_query}&rdquo;
+        </p>
+      )}
       {item.url && (
         <a
           href={item.url}
