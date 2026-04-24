@@ -3,13 +3,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useStyleStore } from "@/store/useStyleStore";
 import { SEASONS } from "@/lib/data";
-import Rule from "./Rule";
 
 const TABS = [
-  { label: "Find My Type", href: "/" },
-  { label: "Style Guide",  href: "/guide" },
-  { label: "Style Me",     href: "/style-me" },
-  { label: "Match Inspo",  href: "/inspo" },
+  { label: "Decode",   href: "/" },
+  { label: "Dossier",  href: "/guide" },
+  { label: "Wardrobe", href: "/style-me" },
+  { label: "Inspo",    href: "/inspo" },
 ];
 
 export default function Header() {
@@ -18,17 +17,23 @@ export default function Header() {
   const seasonData = selS ? SEASONS[selS] : null;
 
   return (
-    <header style={{ background: "#FFFFFF", borderBottom: "1px solid #C8B898", flexShrink: 0 }}>
-      <div style={{ display: "flex", alignItems: "center", height: 52, paddingLeft: 32, paddingRight: 32 }}>
+    <header style={{
+      background: "#0E0B0A",
+      borderBottom: "1px solid rgba(200,184,152,0.1)",
+      flexShrink: 0,
+      position: "relative",
+      zIndex: 50,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", height: 56, paddingLeft: 40, paddingRight: 40 }}>
         {/* Wordmark */}
-        <Link href="/" style={{ textDecoration: "none", flexShrink: 0 }}>
+        <Link href="/" style={{ textDecoration: "none", flexShrink: 0, marginRight: 48 }}>
           <span style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: 22,
-            fontWeight: 700,
+            fontSize: 20,
+            fontWeight: 600,
             fontStyle: "italic",
-            color: "#221516",
-            letterSpacing: "-0.01em",
+            color: "#F5EFE4",
+            letterSpacing: "0.02em",
             lineHeight: 1,
           }}>
             StyleCipher
@@ -36,7 +41,7 @@ export default function Header() {
         </Link>
 
         {/* Tab nav */}
-        <nav style={{ display: "flex", marginLeft: 32, flex: 1 }}>
+        <nav style={{ display: "flex", flex: 1 }}>
           {TABS.map((tab) => {
             const isOn = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
             return (
@@ -47,22 +52,31 @@ export default function Header() {
           })}
         </nav>
 
-        {/* Profile chips */}
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+        {/* Profile status */}
+        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
           {selK && (
-            <span className="chip on" style={{ cursor: "default", fontSize: 9 }}>{selK}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ width: 4, height: 4, background: "#B8962E", borderRadius: "50%" }} />
+              <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.1em", color: "#8A7A68" }}>
+                {selK}
+              </span>
+            </div>
           )}
           {seasonData && (
-            <span
-              className="chip on"
-              style={{ cursor: "default", fontSize: 9, background: seasonData.pal[0], borderColor: seasonData.pal[0] }}
-            >
-              {seasonData.label}
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ width: 10, height: 10, background: seasonData.pal[0], borderRadius: "50%", flexShrink: 0 }} />
+              <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.1em", color: "#8A7A68" }}>
+                {seasonData.label}
+              </span>
+            </div>
+          )}
+          {!selK && !selS && (
+            <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.1em", color: "rgba(138,122,104,0.4)" }}>
+              No profile
             </span>
           )}
         </div>
       </div>
-      <Rule color="#3B0510" />
     </header>
   );
 }

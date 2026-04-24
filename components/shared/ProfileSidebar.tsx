@@ -5,7 +5,6 @@ import { KIBBE, SIL_IMG, SEASONS, ARCHETYPES, ARCHETYPE_IMG } from "@/lib/data";
 import type { ArchetypeCode } from "@/lib/types";
 import WeightBar from "./WeightBar";
 import PaletteDisplay from "./PaletteDisplay";
-import Rule from "./Rule";
 
 export default function ProfileSidebar() {
   const { selK, selS, archWeights } = useStyleStore();
@@ -19,28 +18,68 @@ export default function ProfileSidebar() {
     .slice(0, 3);
 
   return (
-    <aside style={{ width: 210, flexShrink: 0, borderLeft: "1px solid #C8B898", overflowY: "auto", display: "flex", flexDirection: "column" }}>
-      {/* Kibbe section */}
-      <div style={{ padding: "20px 16px 16px" }}>
-        <p className="t-label" style={{ marginBottom: 10 }}>Body Type</p>
+    <aside style={{
+      width: 220,
+      flexShrink: 0,
+      borderLeft: "1px solid rgba(200,184,152,0.1)",
+      overflowY: "auto",
+      display: "flex",
+      flexDirection: "column",
+      background: "#0E0B0A",
+    }}>
+      {/* Header */}
+      <div style={{ padding: "20px 18px 14px", borderBottom: "1px solid rgba(200,184,152,0.08)" }}>
+        <p style={{
+          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontSize: 11,
+          fontWeight: 400,
+          fontStyle: "italic",
+          letterSpacing: "0.12em",
+          color: "rgba(200,184,152,0.4)",
+          textTransform: "uppercase",
+        }}>
+          Your Dossier
+        </p>
+      </div>
+
+      {/* Kibbe */}
+      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(200,184,152,0.06)" }}>
+        <p className="t-label" style={{ marginBottom: 10, color: "rgba(138,122,104,0.6)" }}>Body Architecture</p>
         {kibbeData ? (
           <>
-            <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 17, fontWeight: 700, fontStyle: "italic", color: "#221516", lineHeight: 1.1, marginBottom: 4 }}>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: 18,
+              fontWeight: 700,
+              fontStyle: "italic",
+              color: "#F5EFE4",
+              lineHeight: 1.1,
+              marginBottom: 3,
+            }}>
               {selK}
             </p>
-            <p className="t-body" style={{ marginBottom: 12 }}>{kibbeData.short}</p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
+            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, color: "#8A7A68", marginBottom: 12 }}>
+              {kibbeData.short}
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3 }}>
               {kibbeData.sil.slice(0, 4).map((s) => (
-                <div key={s.n} style={{ position: "relative", height: 56, overflow: "hidden", border: "1px solid #E8DDD0" }}>
+                <div key={s.n} style={{ position: "relative", height: 64, overflow: "hidden" }}>
                   <Image
                     src={SIL_IMG[s.n] ?? SIL_IMG.default}
                     alt={s.n}
                     fill
                     sizes="90px"
-                    style={{ objectFit: "cover", filter: "saturate(0.7)" }}
+                    style={{ objectFit: "cover", filter: "saturate(0.5) brightness(0.7)" }}
                   />
-                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(34,21,22,0.6)", padding: "3px 4px" }}>
-                    <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 7, fontWeight: 500, letterSpacing: "0.1em", color: "#F2EBE0", textTransform: "uppercase" }}>
+                  <div style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    background: "linear-gradient(transparent, rgba(14,11,10,0.85))",
+                    padding: "3px 4px",
+                  }}>
+                    <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 7, fontWeight: 300, letterSpacing: "0.08em", color: "#C8B898" }}>
                       {s.n}
                     </span>
                   </div>
@@ -49,51 +88,77 @@ export default function ProfileSidebar() {
             </div>
           </>
         ) : (
-          <p className="t-body" style={{ color: "#A89A88" }}>Complete the Kibbe quiz</p>
+          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.4)" }}>
+            Pending analysis
+          </p>
         )}
       </div>
 
-      <Rule color="#E8DDD0" />
-
-      {/* Season section */}
-      <div style={{ padding: "16px 16px" }}>
-        <p className="t-label" style={{ marginBottom: 10 }}>Colour Season</p>
+      {/* Season */}
+      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(200,184,152,0.06)" }}>
+        <p className="t-label" style={{ marginBottom: 10, color: "rgba(138,122,104,0.6)" }}>Colour Season</p>
         {seasonData ? (
           <>
-            <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 15, fontWeight: 600, color: "#221516", marginBottom: 2 }}>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: 16,
+              fontWeight: 600,
+              fontStyle: "italic",
+              color: "#F5EFE4",
+              marginBottom: 2,
+            }}>
               {seasonData.label}
             </p>
-            <p className="t-body" style={{ marginBottom: 10, fontSize: 11 }}>{seasonData.sub}</p>
+            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, color: "#8A7A68", marginBottom: 12 }}>
+              {seasonData.sub}
+            </p>
             <PaletteDisplay pal={seasonData.pal} neut={seasonData.neut} />
           </>
         ) : (
-          <p className="t-body" style={{ color: "#A89A88" }}>Complete the Season quiz</p>
+          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.4)" }}>
+            Pending analysis
+          </p>
         )}
       </div>
 
-      <Rule color="#E8DDD0" />
-
-      {/* Top archetypes */}
-      <div style={{ padding: "16px 16px 20px" }}>
-        <p className="t-label" style={{ marginBottom: 12 }}>Top Archetypes</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {top3.map(({ code, wt }) => {
-            const arch = ARCHETYPES[code];
-            if (!arch) return null;
-            return (
-              <div key={code}>
-                <WeightBar
-                  value={wt}
-                  color={arch.c}
-                  label={arch.name}
-                  subLabel={arch.family}
-                />
-              </div>
-            );
-          })}
-        </div>
-        {top3.length === 0 && (
-          <p className="t-body" style={{ color: "#A89A88" }}>Complete the Archetype quiz</p>
+      {/* Archetypes */}
+      <div style={{ padding: "18px 18px 24px" }}>
+        <p className="t-label" style={{ marginBottom: 14, color: "rgba(138,122,104,0.6)" }}>Top Archetypes</p>
+        {top3.length > 0 ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {top3.map(({ code, wt }) => {
+              const arch = ARCHETYPES[code];
+              if (!arch) return null;
+              return (
+                <div key={code}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                    <div style={{ position: "relative", width: 28, height: 28, overflow: "hidden", flexShrink: 0 }}>
+                      <Image
+                        src={ARCHETYPE_IMG[code]}
+                        alt={arch.name}
+                        fill
+                        sizes="28px"
+                        style={{ objectFit: "cover", filter: "saturate(0.6) brightness(0.8)" }}
+                      />
+                    </div>
+                    <div>
+                      <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontWeight: 600, color: "#C8B898", lineHeight: 1.1 }}>
+                        {arch.name}
+                      </p>
+                      <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 8, fontWeight: 300, color: "rgba(138,122,104,0.7)", letterSpacing: "0.08em" }}>
+                        {arch.family}
+                      </p>
+                    </div>
+                  </div>
+                  <WeightBar value={wt} color={arch.c} />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.4)" }}>
+            Pending analysis
+          </p>
         )}
       </div>
     </aside>

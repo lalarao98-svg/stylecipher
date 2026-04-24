@@ -6,7 +6,6 @@ import { updateArchWeights, pickNextRound, shouldStop } from "@/lib/algorithms/a
 import type { ArchetypeCode } from "@/lib/types";
 import ArchCard from "@/components/shared/ArchCard";
 import WeightBar from "@/components/shared/WeightBar";
-import Rule from "@/components/shared/Rule";
 
 type QuizMode = "quiz" | "grid";
 
@@ -48,24 +47,28 @@ export default function ArchetypeQuiz({ onDone }: { onDone: () => void }) {
 
   if (archDone || mode === "grid") {
     return (
-      <div style={{ padding: "24px 32px", overflowY: "auto", flex: 1 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+      <div style={{ padding: "28px 36px", overflowY: "auto", flex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
           <div>
-            <p className="t-label">All Archetypes</p>
-            {archDone && <p className="t-body" style={{ marginTop: 4 }}>Quiz complete. Click any card to boost its weight.</p>}
+            <p className="t-label" style={{ marginBottom: 6, color: "rgba(200,184,152,0.45)" }}>All Archetypes</p>
+            {archDone && (
+              <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 300, color: "rgba(138,122,104,0.6)" }}>
+                Click any card to boost its weight.
+              </p>
+            )}
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 10 }}>
             {!archDone && <button className="btn-text" onClick={() => setMode("quiz")}>Back to Quiz</button>}
             {archDone && <button className="btn-primary" onClick={onDone}>View Results</button>}
           </div>
         </div>
 
-        <Rule color="#C8B898" />
+        <div style={{ width: "100%", height: 1, background: "rgba(200,184,152,0.1)", marginBottom: 20 }} />
 
         {archDone && (
-          <div style={{ marginTop: 20, marginBottom: 24 }}>
-            <p className="t-label" style={{ marginBottom: 12 }}>Your Top Archetypes</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ marginBottom: 28 }}>
+            <p className="t-label" style={{ marginBottom: 14, color: "rgba(200,184,152,0.45)" }}>Your Top Archetypes</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {top5.map((code) => (
                 <WeightBar
                   key={code}
@@ -103,30 +106,30 @@ export default function ArchetypeQuiz({ onDone }: { onDone: () => void }) {
   const round = roundIdx !== null ? AQ[roundIdx] : null;
 
   return (
-    <div style={{ padding: "32px 48px", maxWidth: 680 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <p className="t-label">Archetype Discovery · Round {archStep + 1}</p>
+    <div style={{ padding: "40px 56px", maxWidth: 680 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+        <p className="t-label" style={{ color: "rgba(200,184,152,0.45)" }}>Archetype Discovery · Round {archStep + 1}</p>
         <button className="btn-text" onClick={() => setMode("grid")}>Browse All Archetypes</button>
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
         {top5.slice(0, 3).map((code) => (
           <div key={code} style={{ flex: 1 }}>
             <WeightBar value={archWeights[code] ?? 0} color={ARCHETYPES[code]?.c} />
-            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 8, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8A7A68", marginTop: 3 }}>
+            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 8, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(138,122,104,0.5)", marginTop: 4 }}>
               {ARCHETYPES[code]?.name}
             </p>
           </div>
         ))}
       </div>
 
-      <Rule color="#C8B898" />
+      <div style={{ width: "100%", height: 1, background: "rgba(200,184,152,0.1)", marginBottom: 28 }} />
 
       {round ? (
         <>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 16, margin: "24px 0 28px" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 32 }}>
             <span className="sec-num">{String(archStep + 1).padStart(2, "0")}</span>
-            <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 22, fontWeight: 600, color: "#221516", lineHeight: 1.25, paddingTop: 8 }}>
+            <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 24, fontWeight: 600, color: "#F5EFE4", lineHeight: 1.25, paddingTop: 8 }}>
               {round.q}
             </h3>
           </div>
@@ -140,8 +143,8 @@ export default function ArchetypeQuiz({ onDone }: { onDone: () => void }) {
         </>
       ) : (
         <div style={{ marginTop: 32 }}>
-          <p className="t-body">No more rounds available.</p>
-          <button className="btn-primary" style={{ marginTop: 16 }} onClick={() => { setArchDone(true); onDone(); }}>
+          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 13, fontWeight: 300, color: "rgba(138,122,104,0.7)" }}>No more rounds available.</p>
+          <button className="btn-primary" style={{ marginTop: 20 }} onClick={() => { setArchDone(true); onDone(); }}>
             Finish
           </button>
         </div>
