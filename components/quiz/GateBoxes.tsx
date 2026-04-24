@@ -16,7 +16,7 @@ export default function GateBoxes({ onKnow, onFind }: GateBoxesProps) {
         style={{ background: "#221516", borderRight: "1px solid #3B0510" }}
       >
         <div>
-          <Rule color="#6B1E2E" />
+          <Rule color="#C8B898" />
           <div style={{ marginTop: 24 }}>
             <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 9, fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "#8A7A68", marginBottom: 12 }}>
               Already know yours?
@@ -43,7 +43,7 @@ export default function GateBoxes({ onKnow, onFind }: GateBoxesProps) {
         style={{ background: "#F2EBE0" }}
       >
         <div>
-          <Rule color="#3B0510" />
+          <Rule color="#C8B898" />
           <div style={{ marginTop: 24 }}>
             <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 9, fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "#8A7A68", marginBottom: 12 }}>
               New to this?
