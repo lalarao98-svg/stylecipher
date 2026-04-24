@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "@/components/shared/Header";
 
 export const metadata: Metadata = {
   title:       "StyleCipher",
@@ -9,7 +10,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
+        <Header />
+        <main style={{ flex: 1, display: "flex", overflow: "hidden" }}>
+          {children}
+        </main>
+      </body>
     </html>
   );
 }
