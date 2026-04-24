@@ -31,7 +31,7 @@ export default function FindMyTypePage() {
       { id: "arch",   label: "Archetypes",        done: archDone, color: "#B8962E", num: "03", value: archDone ? "Decoded" : null },
     ];
     return (
-      <div style={{ display: "flex", borderBottom: "1px solid rgba(138,122,104,0.18)", flexShrink: 0, background: "#EDE4D6" }}>
+      <div style={{ display: "flex", borderBottom: "1px solid rgba(138,122,104,0.18)", flexShrink: 0, background: "#F0ECE4" }}>
         {steps.map((s, i) => {
           const isOn = findStep === s.id;
           return (
@@ -78,8 +78,8 @@ export default function FindMyTypePage() {
 
   if (gate === "know") {
     return (
-      <div style={{ flex: 1, overflowY: "auto", padding: "48px 56px", background: "#F5EFE4" }}>
-        <div style={{ maxWidth: 720 }}>
+      <div style={{ flex: 1, overflowY: "auto", padding: "48px 56px 48px 80px", background: "#F9F7F3" }}>
+        <div style={{ maxWidth: 800 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 36 }}>
             <div>
               <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(138,122,104,0.6)", marginBottom: 14 }}>
@@ -124,7 +124,7 @@ export default function FindMyTypePage() {
   }
 
   return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "#F5EFE4" }}>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "#F9F7F3" }}>
       <StatusStrip />
       <div style={{ flex: 1, overflowY: "auto" }}>
         {findStep === "kibbe"  && <KibbeQuiz    onDone={() => setFindStep("season")} />}

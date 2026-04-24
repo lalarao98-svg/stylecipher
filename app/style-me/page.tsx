@@ -92,10 +92,10 @@ export default function StyleMePage() {
   }
 
   return (
-    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F5EFE4" }}>
+    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F9F7F3" }}>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         {/* Filters */}
-        <div style={{ borderBottom: "1px solid rgba(138,122,104,0.15)", padding: "0 32px", flexShrink: 0, background: "#EDE4D6" }}>
+        <div style={{ borderBottom: "1px solid rgba(138,122,104,0.15)", padding: "0 32px", flexShrink: 0, background: "#F0ECE4" }}>
           <div style={FILTER_ROW}>
             <p style={LABEL_W}>Platform</p>
             {PLATFORMS.map((p) => (
@@ -138,7 +138,7 @@ export default function StyleMePage() {
         </div>
 
         {/* Action bar */}
-        <div style={{ padding: "14px 32px", borderBottom: "1px solid rgba(138,122,104,0.12)", display: "flex", alignItems: "center", gap: 16, flexShrink: 0, background: "#F5EFE4" }}>
+        <div style={{ padding: "14px 32px", borderBottom: "1px solid rgba(138,122,104,0.12)", display: "flex", alignItems: "center", gap: 16, flexShrink: 0, background: "#F9F7F3" }}>
           <button
             className="btn-primary"
             onClick={handleStyleMe}

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useStyleStore } from "@/store/useStyleStore";
-import { KIBBE, SIL_IMG, SEASONS, ARCHETYPES, ARCHETYPE_IMG } from "@/lib/data";
+import { KIBBE, SEASONS, ARCHETYPES, ARCHETYPE_IMG } from "@/lib/data";
 import type { ArchetypeCode } from "@/lib/types";
 import WeightBar from "./WeightBar";
 import PaletteDisplay from "./PaletteDisplay";
@@ -21,21 +21,21 @@ export default function ProfileSidebar() {
     <aside style={{
       width: 220,
       flexShrink: 0,
-      borderLeft: "1px solid rgba(138,122,104,0.18)",
+      borderLeft: "1px solid rgba(138,122,104,0.15)",
       overflowY: "auto",
       display: "flex",
       flexDirection: "column",
-      background: "#EDE4D6",
+      background: "#F0ECE4",
     }}>
       {/* Header */}
-      <div style={{ padding: "20px 18px 14px", borderBottom: "1px solid rgba(138,122,104,0.12)" }}>
+      <div style={{ padding: "18px 18px 14px", borderBottom: "1px solid rgba(138,122,104,0.1)" }}>
         <p style={{
           fontFamily: "'Cormorant Garamond', Georgia, serif",
           fontSize: 11,
           fontWeight: 400,
           fontStyle: "italic",
           letterSpacing: "0.12em",
-          color: "rgba(106,90,74,0.55)",
+          color: "rgba(106,90,74,0.5)",
           textTransform: "uppercase",
         }}>
           Your Dossier
@@ -43,8 +43,8 @@ export default function ProfileSidebar() {
       </div>
 
       {/* Kibbe */}
-      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(138,122,104,0.08)" }}>
-        <p className="t-label" style={{ marginBottom: 10 }}>Body Architecture</p>
+      <div style={{ padding: "16px 18px 14px", borderBottom: "1px solid rgba(138,122,104,0.08)" }}>
+        <p className="t-label" style={{ marginBottom: 8 }}>Body Architecture</p>
         {kibbeData ? (
           <>
             <p style={{
@@ -54,36 +54,18 @@ export default function ProfileSidebar() {
               fontStyle: "italic",
               color: "#221516",
               lineHeight: 1.1,
-              marginBottom: 3,
+              marginBottom: 2,
             }}>
               {selK}
             </p>
             <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, color: "#8A7A68", marginBottom: 12 }}>
               {kibbeData.short}
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               {kibbeData.sil.slice(0, 4).map((s) => (
-                <div key={s.n} style={{ position: "relative", height: 64, overflow: "hidden" }}>
-                  <Image
-                    src={SIL_IMG[s.n] ?? SIL_IMG.default}
-                    alt={s.n}
-                    fill
-                    sizes="90px"
-                    style={{ objectFit: "cover", filter: "saturate(0.6) brightness(0.9)" }}
-                  />
-                  <div style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    background: "linear-gradient(transparent, rgba(34,21,22,0.7))",
-                    padding: "3px 4px",
-                  }}>
-                    <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 7, fontWeight: 300, letterSpacing: "0.08em", color: "#F5EFE4" }}>
-                      {s.n}
-                    </span>
-                  </div>
-                </div>
+                <p key={s.n} style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, color: "#6A5A4A", paddingLeft: 10, borderLeft: "1px solid rgba(184,150,46,0.4)", lineHeight: 1.3 }}>
+                  {s.n}
+                </p>
               ))}
             </div>
           </>
@@ -95,8 +77,8 @@ export default function ProfileSidebar() {
       </div>
 
       {/* Season */}
-      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(138,122,104,0.08)" }}>
-        <p className="t-label" style={{ marginBottom: 10 }}>Colour Season</p>
+      <div style={{ padding: "16px 18px 14px", borderBottom: "1px solid rgba(138,122,104,0.08)" }}>
+        <p className="t-label" style={{ marginBottom: 8 }}>Colour Season</p>
         {seasonData ? (
           <>
             <p style={{
@@ -122,8 +104,8 @@ export default function ProfileSidebar() {
       </div>
 
       {/* Archetypes */}
-      <div style={{ padding: "18px 18px 24px" }}>
-        <p className="t-label" style={{ marginBottom: 14 }}>Top Archetypes</p>
+      <div style={{ padding: "16px 18px 24px" }}>
+        <p className="t-label" style={{ marginBottom: 12 }}>Top Archetypes</p>
         {top3.length > 0 ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {top3.map(({ code, wt }) => {
@@ -132,13 +114,13 @@ export default function ProfileSidebar() {
               return (
                 <div key={code}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                    <div style={{ position: "relative", width: 28, height: 28, overflow: "hidden", flexShrink: 0 }}>
+                    <div style={{ position: "relative", width: 28, height: 28, overflow: "hidden", flexShrink: 0, border: "1px solid rgba(138,122,104,0.2)" }}>
                       <Image
                         src={ARCHETYPE_IMG[code]}
                         alt={arch.name}
                         fill
                         sizes="28px"
-                        style={{ objectFit: "cover", filter: "saturate(0.7) brightness(0.9)" }}
+                        style={{ objectFit: "cover", filter: "saturate(0.7)" }}
                       />
                     </div>
                     <div>

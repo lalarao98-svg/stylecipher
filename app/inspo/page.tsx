@@ -73,7 +73,7 @@ export default function InspoPage() {
   }
 
   return (
-    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F5EFE4" }}>
+    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F9F7F3" }}>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto", padding: "48px 56px" }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 20, marginBottom: 32 }}>
           <span className="sec-num">01</span>

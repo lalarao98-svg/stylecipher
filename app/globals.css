@@ -23,7 +23,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; background: #F5EFE4; }
+html, body { height: 100%; overflow: hidden; background: #F9F7F3; }
 
 ::-webkit-scrollbar { width: 2px; height: 2px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -265,14 +265,14 @@ html, body { height: 100%; overflow: hidden; background: #F5EFE4; }
 }
 
 .result-card {
-  background: #FEFCF9;
-  border: 1px solid rgba(138,122,104,0.2);
+  background: #FFFFFF;
+  border: 1px solid rgba(138,122,104,0.18);
   transition: border-color 0.2s, transform 0.2s;
 }
-.result-card:hover { border-color: rgba(138,122,104,0.4); transform: translateY(-1px); }
+.result-card:hover { border-color: rgba(138,122,104,0.38); transform: translateY(-1px); }
 
 .dossier-card {
-  background: #FEFCF9;
+  background: #FFFFFF;
   border-left: 3px solid #3B0510;
   padding: 28px 32px;
   position: relative;
@@ -383,4 +383,4 @@ html, body { height: 100%; overflow: hidden; background: #F5EFE4; }
   transition: all 0.2s;
 }
 .step-tab:hover { background: rgba(34,21,22,0.025); }
-.step-tab.on    { background: #F5EFE4; }
+.step-tab.on    { background: #F9F7F3; }

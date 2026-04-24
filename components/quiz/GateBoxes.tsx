@@ -9,7 +9,7 @@ export default function GateBoxes({ onKnow, onFind }: GateBoxesProps) {
   return (
     <div style={{ display: "flex", height: "100%", overflow: "hidden" }}>
       {/* Enter Directly */}
-      <button className="gate-box" onClick={onKnow} style={{ background: "#EDE4D6", borderRight: "1px solid rgba(138,122,104,0.18)" }}>
+      <button className="gate-box" onClick={onKnow} style={{ background: "#F0ECE4", borderRight: "1px solid rgba(138,122,104,0.15)" }}>
         <div>
           <div style={{ width: 32, height: 1, background: "#C8B898", marginBottom: 36 }} />
           <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(138,122,104,0.6)", marginBottom: 16 }}>
@@ -30,7 +30,7 @@ export default function GateBoxes({ onKnow, onFind }: GateBoxesProps) {
       </button>
 
       {/* Decode Your Style */}
-      <button className="gate-box" onClick={onFind} style={{ background: "#F5EFE4" }}>
+      <button className="gate-box" onClick={onFind} style={{ background: "#F9F7F3" }}>
         <div>
           <div style={{ width: 32, height: 1, background: "#3B0510", marginBottom: 36 }} />
           <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(138,122,104,0.6)", marginBottom: 16 }}>

@@ -1,6 +1,6 @@
 "use client";
 import { useStyleStore } from "@/store/useStyleStore";
-import { KIBBE, SIL_IMG, SEASONS, ARCHETYPES, ARCHETYPE_IMG, BRANDS, DEFAULT_BRANDS, SFAM } from "@/lib/data";
+import { KIBBE, SEASONS, ARCHETYPES, ARCHETYPE_IMG, BRANDS, DEFAULT_BRANDS, SFAM } from "@/lib/data";
 import type { ArchetypeCode } from "@/lib/types";
 import Image from "next/image";
 import PaletteDisplay from "@/components/shared/PaletteDisplay";
@@ -32,7 +32,7 @@ export default function GuidePage() {
 
   if (!selK && !selS) {
     return (
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", background: "#F5EFE4" }}>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", background: "#F9F7F3" }}>
         <div style={{ textAlign: "center", maxWidth: 440 }}>
           <p className="t-label" style={{ marginBottom: 20 }}>No Profile Yet</p>
           <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 44, fontWeight: 700, fontStyle: "italic", color: "#221516", lineHeight: 0.88, marginBottom: 24 }}>
@@ -48,7 +48,7 @@ export default function GuidePage() {
   }
 
   return (
-    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F5EFE4" }}>
+    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F9F7F3" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
         {/* Hero */}
         <div style={{ background: "#1A1210", padding: "48px 56px 44px", borderBottom: "1px solid rgba(138,122,104,0.12)" }}>
@@ -119,23 +119,13 @@ export default function GuidePage() {
                   </div>
                 </div>
 
-                <div style={{ width: 220, flexShrink: 0 }}>
-                  <p className="t-label" style={{ marginBottom: 10 }}>Silhouettes</p>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
-                    {kibbeData.sil.map((s) => (
-                      <div key={s.n} style={{ position: "relative", height: 80, overflow: "hidden", border: "1px solid rgba(138,122,104,0.2)" }}>
-                        <Image
-                          src={SIL_IMG[s.n] ?? SIL_IMG.default}
-                          alt={s.n}
-                          fill
-                          sizes="100px"
-                          style={{ objectFit: "cover", filter: "saturate(0.7)" }}
-                        />
-                        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "linear-gradient(transparent, rgba(34,21,22,0.7))", padding: "4px 5px" }}>
-                          <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 7, fontWeight: 300, letterSpacing: "0.08em", color: "#F5EFE4" }}>
-                            {s.n}
-                          </span>
-                        </div>
+                <div style={{ width: 200, flexShrink: 0 }}>
+                  <p className="t-label" style={{ marginBottom: 14 }}>Silhouettes</p>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    {kibbeData.sil.map((s, i) => (
+                      <div key={s.n} style={{ padding: "10px 0", borderBottom: i < kibbeData.sil.length - 1 ? "1px solid rgba(138,122,104,0.12)" : "none", display: "flex", alignItems: "center", gap: 10 }}>
+                        <div style={{ width: 3, height: 3, background: kibbeData.c, borderRadius: "50%", flexShrink: 0, opacity: 0.7 }} />
+                        <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 15, fontWeight: 400, color: "#221516" }}>{s.n}</span>
                       </div>
                     ))}
                   </div>
