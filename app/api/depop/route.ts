@@ -1,41 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /* ── Depop proxy — avoids CORS from the browser ── */
-// Depop condition codes: 3=Good 4=Like New 5=New with tags
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = req.nextUrl;
-  const q         = searchParams.get("q")         ?? "";
-  const sizes     = searchParams.get("sizes")      ?? "";   // comma-separated
-  const condition = searchParams.get("condition")  ?? "3";  // minimum condition
-  const limit     = searchParams.get("limit")      ?? "50";
+interface DepopRequestBody {
+  query: string;
+  size?:  string;
+  limit?: number;
+}
 
-  if (!q) {
-    return NextResponse.json({ error: "q is required" }, { status: 400 });
+export async function POST(req: NextRequest) {
+  const body: DepopRequestBody = await req.json();
+  const { query, size, limit = 50 } = body;
+
+  if (!query) {
+    return NextResponse.json({ error: "query is required" }, { status: 400 });
   }
 
-  const params = new URLSearchParams({
-    q,
-    ...(sizes && { sizes }),
-    condition_gte: condition,
-    limit,
-  });
+  const params = new URLSearchParams({ q: query, limit: String(limit) });
+  if (size) params.set("sizes", size);
+  // condition_type accepts multiple values; include all "good and above" conditions
+  params.append("condition_type", "good");
+  params.append("condition_type", "like_new");
+  params.append("condition_type", "new_with_tags");
 
   try {
     const res = await fetch(
       `https://api.depop.com/api/v2/search/products?${params.toString()}`,
       {
         headers: {
-          "Accept":       "application/json",
-          "User-Agent":   "StyleCipher/1.0",
+          "Accept":     "application/json",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         },
         next: { revalidate: 300 }, // cache 5 min
       },
     );
 
     if (!res.ok) {
+      const msg = await res.text().catch(() => "");
       return NextResponse.json(
-        { error: `Depop API error ${res.status}` },
+        { error: `Depop returned ${res.status}. The endpoint may have changed. Details: ${msg.slice(0, 200)}` },
         { status: res.status },
       );
     }
@@ -44,6 +47,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data);
   } catch (err) {
     console.error("[depop proxy]", err);
-    return NextResponse.json({ error: "Proxy request failed" }, { status: 502 });
+    return NextResponse.json(
+      { error: "Proxy request failed — Depop may be unreachable or the endpoint has moved." },
+      { status: 502 },
+    );
   }
 }
