@@ -52,21 +52,6 @@ export default function StyleMePage() {
     const activePlatform = overridePlatform ?? platform;
     const activeCategory = overrideCategory ?? category;
     try {
-      let depopListings: unknown[] | undefined;
-      if (activePlatform === "Depop") {
-        const query = [...top3Names.slice(0, 2), activeCategory !== "all" ? activeCategory : ""]
-          .filter(Boolean).join(" ").trim() || "vintage";
-        const depopRes = await fetch("/api/depop", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, size: depopSize || undefined, limit: 30 }),
-        });
-        if (depopRes.ok) {
-          const depopData = await depopRes.json();
-          depopListings = Array.isArray(depopData?.objects) ? depopData.objects : [];
-        }
-      }
-
       const res = await fetch("/api/style-me", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,7 +63,6 @@ export default function StyleMePage() {
           platform: activePlatform,
           category: activeCategory,
           depopSize,
-          depopListings,
         }),
       });
       if (!res.ok) throw new Error(`API error ${res.status}`);

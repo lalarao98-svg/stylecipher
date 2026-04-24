@@ -15,16 +15,15 @@ const WEB_SEARCH: WebSearchTool20260209 = {
 };
 
 interface RequestBody {
-  kibbeType:      KibbeType | null;
-  colorSeason:    SeasonKey | null;
-  archetypes:     string[];        // top 3 archetype names from store
-  platform:       Platform;
-  category:       Category;
-  vibes:          string[];
-  depopSize?:     string;
-  depopListings?: unknown[];       // pre-fetched Depop results from /api/depop
-  inspoImage?:    string;          // base64 data URI
-  inspoMode?:     boolean;
+  kibbeType:   KibbeType | null;
+  colorSeason: SeasonKey | null;
+  archetypes:  string[];
+  platform:    Platform;
+  category:    Category;
+  vibes:       string[];
+  depopSize?:  string;
+  inspoImage?: string;  // base64 data URI
+  inspoMode?:  boolean;
 }
 
 export async function POST(req: NextRequest) {
@@ -32,7 +31,7 @@ export async function POST(req: NextRequest) {
   const {
     kibbeType, colorSeason, archetypes,
     platform, category, vibes,
-    depopSize, depopListings, inspoImage, inspoMode,
+    depopSize, inspoImage, inspoMode,
   } = body;
 
   const k = kibbeType ? KIBBE[kibbeType] : null;
@@ -53,16 +52,13 @@ export async function POST(req: NextRequest) {
       : "",
     `PLATFORM: ${platform === "all" ? "Rent the Runway (rtr.com), Nuuly (nuuly.com), FashionPass (fashionpass.com)" : platform}`,
     isDepop
-      ? `DEPOP: Size ${depopSize ?? "S"} US letter. Condition Good or above. Vintage sizing typically runs 1–2 sizes small — account for this. Provide exact copyable Depop search queries.`
-      : "",
-    isDepop && depopListings && depopListings.length > 0
-      ? `LIVE DEPOP LISTINGS (prioritise these when available):\n${JSON.stringify(depopListings.slice(0, 20), null, 2)}`
+      ? `DEPOP SEARCH INSTRUCTIONS:\n- Size: ${depopSize ?? "S"} US. Vintage items typically run 1–2 sizes small — search one size up.\n- Use web_search with queries like: site:depop.com "vintage [style] [category] [size]"\n- Find 8 REAL current Depop listings with actual depop.com URLs.\n- For each listing found, extract the real listing URL, title, price, and seller.\n- If a listing has been sold, skip it and find another.`
       : "",
     category !== "all" ? `CATEGORY: ${category}` : "",
     vibeStr ? `VIBE / OCCASION: ${vibeStr}` : "",
     "Recommend exactly 8 items. For each item explain why it works — body type, colour season, AND archetype reasoning combined.",
     isDepop
-      ? `Return a JSON array ONLY — no markdown fences:\n[{"name":"item name","brand":"brand","platform":"Depop","price":"price range","match":"why this works for this client","search_query":"exact Depop search string","era":"decade if vintage, else omit"}]`
+      ? `Return a JSON array ONLY — no markdown fences:\n[{"name":"listing title from Depop","brand":"seller or brand name","platform":"Depop","price":"actual listed price","match":"why this works for this client","url":"https://www.depop.com/products/actual-listing-slug/","search_query":"search query used","era":"decade if vintage, else omit"}]`
       : `Return a JSON array ONLY — no markdown fences:\n[{"name":"item name","brand":"brand","platform":"RTR|Nuuly|FashionPass","price":"rental price","match":"why this works for this client","url":"direct listing URL if found"}]`,
   ].filter(Boolean).join("\n\n");
 
@@ -99,7 +95,9 @@ export async function POST(req: NextRequest) {
     messages = [
       {
         role: "user",
-        content: `Find ${category !== "all" ? category.toLowerCase() : "pieces"}${vibeStr ? ` for ${vibeStr}` : ""} from ${isDepop ? "Depop" : "RTR, Nuuly, and FashionPass"}. Use web_search to find real current listings. Return JSON only.`,
+        content: isDepop
+          ? `Search Depop for ${category !== "all" ? category.toLowerCase() : "clothing"}${vibeStr ? ` (${vibeStr} aesthetic)` : ""}${archetypes.length > 0 ? `, matching ${archetypes.slice(0, 2).join(" / ")} style` : ""}. Use web_search with site:depop.com queries to find 8 real active listings. Extract actual listing URLs, prices, and titles. Return JSON only.`
+          : `Find ${category !== "all" ? category.toLowerCase() : "pieces"}${vibeStr ? ` for ${vibeStr}` : ""} from RTR, Nuuly, and FashionPass. Use web_search to find real current listings. Return JSON only.`,
       },
     ];
   }
