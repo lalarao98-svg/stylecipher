@@ -1,7 +1,6 @@
 "use client";
-import Image from "next/image";
 import { useStyleStore } from "@/store/useStyleStore";
-import { KIBBE, SEASONS, ARCHETYPES, ARCHETYPE_IMG } from "@/lib/data";
+import { KIBBE, SEASONS, ARCHETYPES } from "@/lib/data";
 import type { ArchetypeCode } from "@/lib/types";
 import WeightBar from "./WeightBar";
 import PaletteDisplay from "./PaletteDisplay";
@@ -114,14 +113,10 @@ export default function ProfileSidebar() {
               return (
                 <div key={code}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                    <div style={{ position: "relative", width: 28, height: 28, overflow: "hidden", flexShrink: 0, border: "1px solid rgba(138,122,104,0.2)" }}>
-                      <Image
-                        src={ARCHETYPE_IMG[code]}
-                        alt={arch.name}
-                        fill
-                        sizes="28px"
-                        style={{ objectFit: "cover", filter: "saturate(0.7)" }}
-                      />
+                    <div style={{ width: 28, height: 28, flexShrink: 0, background: `linear-gradient(135deg, ${arch.c}20, ${arch.c}50)`, border: `1px solid ${arch.c}40`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 12, fontStyle: "italic", color: arch.c, fontWeight: 700 }}>
+                        {arch.family[0]}
+                      </span>
                     </div>
                     <div>
                       <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontWeight: 600, color: "#221516", lineHeight: 1.1 }}>

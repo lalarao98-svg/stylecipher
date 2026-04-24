@@ -247,22 +247,14 @@ html, body { height: 100%; overflow: hidden; background: #F9F7F3; }
 
 /* ─── Cards ──────────────────────────────────── */
 .arch-card {
-  position: relative;
-  overflow: hidden;
   cursor: pointer;
   border: 1px solid rgba(138,122,104,0.2);
-  transition: border-color 0.25s, transform 0.25s;
+  background: #FFFFFF;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  overflow: hidden;
 }
-.arch-card:hover { border-color: rgba(184,150,46,0.5); transform: translateY(-2px); }
+.arch-card:hover { border-color: rgba(184,150,46,0.5); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(138,122,104,0.12); }
 .arch-card.on    { border: 1.5px solid #B8962E; }
-.arch-card-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(26,18,16,0.88));
-  padding: 28px 10px 9px;
-}
 
 .result-card {
   background: #FFFFFF;

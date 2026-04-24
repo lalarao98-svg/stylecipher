@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStyleStore } from "@/store/useStyleStore";
 import type { Platform, Category, StyleMeResult } from "@/lib/types";
 import { ARCHETYPES } from "@/lib/data";
@@ -8,7 +8,6 @@ import ProfileSidebar from "@/components/shared/ProfileSidebar";
 
 const PLATFORMS: Platform[] = ["all", "RTR", "Nuuly", "FashionPass", "Depop"];
 const CATEGORIES: Category[] = ["all", "Dresses", "Tops", "Bottoms", "Outerwear", "Sets"];
-const VIBES = ["Minimalist", "Romantic", "Edgy", "Bohemian", "Classic", "Streetwear", "Preppy", "Tailored"];
 
 const FILTER_ROW: React.CSSProperties = {
   display: "flex",
@@ -32,29 +31,30 @@ const LABEL_W: React.CSSProperties = {
 export default function StyleMePage() {
   const {
     selK, selS, archWeights, depopSize,
-    platform, category, vibes,
+    platform, category,
     styleMeResults, pushStyleMeResults,
-    setPlatform, setCategory, toggleVibe, setDepopSize,
+    setPlatform, setCategory, setDepopSize,
   } = useStyleStore();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const codes = Object.keys(ARCHETYPES) as ArchetypeCode[];
-  const top3Names = codes
-    .sort((a, b) => (archWeights[b] ?? 0) - (archWeights[a] ?? 0))
-    .slice(0, 3)
-    .map((c) => ARCHETYPES[c].name);
+  const sortedCodes = [...codes].sort((a, b) => (archWeights[b] ?? 0) - (archWeights[a] ?? 0));
+  const top3Names = sortedCodes.slice(0, 3).map((c) => ARCHETYPES[c].name);
+  const top3Families = sortedCodes.slice(0, 3).map((c) => ARCHETYPES[c].family);
 
   const latestResults = styleMeResults[0] ?? [];
 
-  async function handleStyleMe() {
+  async function fetchResults(overridePlatform?: Platform, overrideCategory?: Category) {
     setLoading(true);
     setError(null);
+    const activePlatform = overridePlatform ?? platform;
+    const activeCategory = overrideCategory ?? category;
     try {
       let depopListings: unknown[] | undefined;
-      if (platform === "Depop") {
-        const query = [...top3Names.slice(0, 2), category !== "all" ? category : "", vibes[0] ?? ""]
+      if (activePlatform === "Depop") {
+        const query = [...top3Names.slice(0, 2), activeCategory !== "all" ? activeCategory : ""]
           .filter(Boolean).join(" ").trim() || "vintage";
         const depopRes = await fetch("/api/depop", {
           method: "POST",
@@ -74,9 +74,9 @@ export default function StyleMePage() {
           kibbeType: selK,
           colorSeason: selS,
           archetypes: top3Names,
-          platform,
-          category,
-          vibes,
+          vibes: top3Families,
+          platform: activePlatform,
+          category: activeCategory,
           depopSize,
           depopListings,
         }),
@@ -91,6 +91,24 @@ export default function StyleMePage() {
     }
   }
 
+  // Auto-fetch on mount if profile is set
+  useEffect(() => {
+    if (selK || selS) {
+      fetchResults();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handlePlatform(p: Platform) {
+    setPlatform(p);
+    fetchResults(p, undefined);
+  }
+
+  function handleCategory(c: Category) {
+    setCategory(c);
+    fetchResults(undefined, c);
+  }
+
   return (
     <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F9F7F3" }}>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -99,26 +117,17 @@ export default function StyleMePage() {
           <div style={FILTER_ROW}>
             <p style={LABEL_W}>Platform</p>
             {PLATFORMS.map((p) => (
-              <button key={p} className={`plat-btn${platform === p ? " on" : ""}`} onClick={() => setPlatform(p)}>
+              <button key={p} className={`plat-btn${platform === p ? " on" : ""}`} onClick={() => handlePlatform(p)}>
                 {p === "all" ? "All" : p}
               </button>
             ))}
           </div>
 
-          <div style={FILTER_ROW}>
+          <div style={{ ...FILTER_ROW, borderBottom: platform === "Depop" ? "1px solid rgba(138,122,104,0.1)" : "none" }}>
             <p style={LABEL_W}>Category</p>
             {CATEGORIES.map((c) => (
-              <button key={c} className={`plat-btn${category === c ? " on" : ""}`} onClick={() => setCategory(c)}>
+              <button key={c} className={`plat-btn${category === c ? " on" : ""}`} onClick={() => handleCategory(c)}>
                 {c === "all" ? "All" : c}
-              </button>
-            ))}
-          </div>
-
-          <div style={{ ...FILTER_ROW, flexWrap: "wrap", borderBottom: platform === "Depop" ? "1px solid rgba(138,122,104,0.1)" : "none" }}>
-            <p style={LABEL_W}>Vibe</p>
-            {VIBES.map((v) => (
-              <button key={v} className={`vibe-pill${vibes.includes(v) ? " on" : ""}`} onClick={() => toggleVibe(v)}>
-                {v}
               </button>
             ))}
           </div>
@@ -138,13 +147,9 @@ export default function StyleMePage() {
         </div>
 
         {/* Action bar */}
-        <div style={{ padding: "14px 32px", borderBottom: "1px solid rgba(138,122,104,0.12)", display: "flex", alignItems: "center", gap: 16, flexShrink: 0, background: "#F9F7F3" }}>
-          <button
-            className="btn-primary"
-            onClick={handleStyleMe}
-            disabled={loading || (!selK && !selS)}
-          >
-            {loading ? (platform === "Depop" ? "Fetching listings…" : "Searching…") : "Style Me"}
+        <div style={{ padding: "12px 32px", borderBottom: "1px solid rgba(138,122,104,0.12)", display: "flex", alignItems: "center", gap: 16, flexShrink: 0, background: "#F9F7F3" }}>
+          <button className="btn-primary" onClick={() => fetchResults()} disabled={loading || (!selK && !selS)}>
+            {loading ? (platform === "Depop" ? "Fetching listings…" : "Searching…") : "Refresh"}
           </button>
           {!selK && !selS && (
             <p className="t-body">
@@ -156,15 +161,25 @@ export default function StyleMePage() {
 
         {/* Results */}
         <div style={{ flex: 1, overflowY: "auto", padding: "32px 32px" }}>
-          {latestResults.length === 0 && !loading && (
+          {loading && latestResults.length === 0 && (
             <div style={{ textAlign: "center", paddingTop: 80 }}>
-              <p className="t-label" style={{ marginBottom: 20 }}>No results yet</p>
-              <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 44, fontWeight: 700, fontStyle: "italic", color: "#221516", lineHeight: 0.88, marginBottom: 20 }}>
-                Ready to Style You
-              </h2>
-              <p className="t-body" style={{ maxWidth: 360, margin: "0 auto" }}>
-                Set your filters and click Style Me to get personalised picks curated for your body type, colour season, and archetypes.
+              <p className="t-label" style={{ marginBottom: 16 }}>
+                {platform === "Depop" ? "Fetching listings…" : "Curating your wardrobe…"}
               </p>
+              <p className="t-body" style={{ color: "#8A7A68" }}>Finding pieces that match your profile</p>
+            </div>
+          )}
+
+          {!loading && latestResults.length === 0 && !selK && !selS && (
+            <div style={{ textAlign: "center", paddingTop: 80 }}>
+              <p className="t-label" style={{ marginBottom: 20 }}>Profile required</p>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 44, fontWeight: 700, fontStyle: "italic", color: "#221516", lineHeight: 0.88, marginBottom: 20 }}>
+                Complete Decode First
+              </h2>
+              <p className="t-body" style={{ maxWidth: 360, margin: "0 auto 28px" }}>
+                Your body type, colour season, and archetypes are needed to curate your wardrobe.
+              </p>
+              <a href="/" className="btn-primary">Go to Decode</a>
             </div>
           )}
 
@@ -207,13 +222,7 @@ function ResultCard({ item }: { item: StyleMeResult }) {
         </p>
       )}
       {item.url && (
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-text"
-          style={{ marginTop: 8, alignSelf: "flex-start" }}
-        >
+        <a href={item.url} target="_blank" rel="noopener noreferrer" className="btn-text" style={{ marginTop: 8, alignSelf: "flex-start" }}>
           View Item
         </a>
       )}

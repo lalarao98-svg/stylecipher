@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useStyleStore } from "@/store/useStyleStore";
-import { AQ, ARCHETYPES, ARCHETYPE_IMG } from "@/lib/data";
+import { AQ, ARCHETYPES } from "@/lib/data";
 import { updateArchWeights, pickNextRound, shouldStop } from "@/lib/algorithms/archetype";
 import type { ArchetypeCode } from "@/lib/types";
 import ArchCard from "@/components/shared/ArchCard";
@@ -87,7 +87,7 @@ export default function ArchetypeQuiz({ onDone }: { onDone: () => void }) {
                 code={code}
                 name={arch.name}
                 family={arch.family}
-                imgUrl={ARCHETYPE_IMG[code]}
+
                 accentColor={arch.c}
                 showWeight={archWeights[code] ?? 0}
                 onClick={() => handleManualSelect(code)}

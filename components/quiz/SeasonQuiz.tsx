@@ -6,6 +6,30 @@ import { calcSeason } from "@/lib/algorithms/season";
 import type { SeasonKey } from "@/lib/types";
 import PaletteDisplay from "@/components/shared/PaletteDisplay";
 
+// Color swatches per question (indexed) per option (indexed), null = no swatch
+const SWATCHES: (string | null)[][] = [
+  // Q0: Which metal looks best?
+  ["#D4AE4A", "#B8C8D8", "#9B8B76"],
+  // Q1: Vein colour
+  ["#6B8C3A", "#5A6B8A", "#7A8A6A"],
+  // Q2: Natural hair colour
+  ["#C8842A", "#9A8A78", "#3A1A08", "#1A1A28", "#B83A1A"],
+  // Q3: Eye colour
+  ["#8A6A3A", "#5A7A8A", "#E8503A", "#A89A88"],
+  // Q4: Skin tone depth
+  ["#F5DCC8", "#E8C4A0", "#C8966A", "#9A6A40", "#6A3A20"],
+  // Q5: White vs off-white
+  ["#FFFFFF", "#F5EFE4", "#C8B898", null],
+  // Q6: Bright colours on you
+  ["#E83A5A", "#A89A88", "#E8721A", "#3A72E8"],
+  // Q7: Earth tones on you
+  ["#8B5A3A", "#B09A88", "#C8A87A"],
+  // Q8: Contrast (abstract — no swatches)
+  [null, null, null],
+  // Q9: Overall colouring
+  ["#D4A848", "#8AA0B0", "#8B5A2A", "#3A5AB0", "#A89A88"],
+];
+
 export default function SeasonQuiz({ onDone }: { onDone: () => void }) {
   const { seasonStep, seasonScores, selS, setSeasonStep, setSeasonScores, setSelS } = useStyleStore();
   const [showResult, setShowResult] = useState<SeasonKey | null>(null);
@@ -32,6 +56,7 @@ export default function SeasonQuiz({ onDone }: { onDone: () => void }) {
   }
 
   const ALL_SEASONS = Object.keys(SEASONS) as SeasonKey[];
+  const qSwatches = SWATCHES[seasonStep] ?? [];
 
   if (showResult) {
     const data = SEASONS[showResult];
@@ -89,11 +114,27 @@ export default function SeasonQuiz({ onDone }: { onDone: () => void }) {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {question.opts.map((opt) => (
-          <button key={opt.l} className="quiz-opt" onClick={() => handleOpt(opt.sc)}>
-            {opt.l}
-          </button>
-        ))}
+        {question.opts.map((opt, oi) => {
+          const swatch = qSwatches[oi];
+          return (
+            <button key={opt.l} className="quiz-opt" onClick={() => handleOpt(opt.sc)}>
+              <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                {swatch && (
+                  <span style={{
+                    display: "inline-block",
+                    width: 16,
+                    height: 16,
+                    borderRadius: "50%",
+                    background: swatch,
+                    border: "1px solid rgba(0,0,0,0.1)",
+                    flexShrink: 0,
+                  }} />
+                )}
+                {opt.l}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {seasonStep > 0 && (

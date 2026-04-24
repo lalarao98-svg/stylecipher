@@ -1,8 +1,7 @@
 "use client";
 import { useStyleStore } from "@/store/useStyleStore";
-import { KIBBE, SEASONS, ARCHETYPES, ARCHETYPE_IMG, BRANDS, DEFAULT_BRANDS, SFAM } from "@/lib/data";
+import { KIBBE, SEASONS, ARCHETYPES, BRANDS, DEFAULT_BRANDS, SFAM } from "@/lib/data";
 import type { ArchetypeCode } from "@/lib/types";
-import Image from "next/image";
 import PaletteDisplay from "@/components/shared/PaletteDisplay";
 import WeightBar from "@/components/shared/WeightBar";
 import ProfileSidebar from "@/components/shared/ProfileSidebar";
@@ -193,15 +192,12 @@ export default function GuidePage() {
                 const wt = archWeights[code] ?? 0;
                 return (
                   <div key={code} style={{ display: "flex", gap: 32 }}>
-                    <div style={{ position: "relative", width: 180, height: 240, flexShrink: 0, overflow: "hidden", border: "1px solid rgba(138,122,104,0.2)" }}>
-                      <Image
-                        src={ARCHETYPE_IMG[code]}
-                        alt={arch.name}
-                        fill
-                        sizes="180px"
-                        style={{ objectFit: "cover", filter: "saturate(0.8)" }}
-                      />
-                      <div style={{ position: "absolute", top: 8, left: 8, background: "rgba(34,21,22,0.75)", padding: "2px 8px" }}>
+                    <div style={{ width: 180, height: 240, flexShrink: 0, overflow: "hidden", border: `1px solid ${arch.c}30`, background: `linear-gradient(160deg, ${arch.c}12 0%, ${arch.c}35 100%)`, position: "relative", display: "flex", alignItems: "flex-end", padding: "16px 14px" }}>
+                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: arch.c, opacity: 0.7 }} />
+                      <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 120, fontWeight: 700, fontStyle: "italic", color: arch.c, opacity: 0.15, lineHeight: 1, position: "absolute", bottom: -16, right: -4, pointerEvents: "none" }}>
+                        {arch.family[0]}
+                      </span>
+                      <div style={{ background: "rgba(34,21,22,0.72)", padding: "3px 8px" }}>
                         <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", fontWeight: 300, color: "#F5EFE4" }}>
                           #{rank + 1}
                         </span>
