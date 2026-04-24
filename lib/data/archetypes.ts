@@ -1,5 +1,47 @@
 import type { ArchetypeCode, ArchetypeData } from "@/lib/types";
 
+// 4-colour palette representing each archetype's typical wardrobe palette
+export const ARCHETYPE_PAL: Record<ArchetypeCode, [string, string, string, string]> = {
+  "1a": ["#D4C9B2", "#9A8A78", "#7A8A9A", "#2A3A4A"], // oat · stone · slate · navy
+  "1b": ["#F5EFE4", "#C8A87A", "#9A8A7A", "#5A5050"], // ivory · camel · mushroom · warm grey
+  "1c": ["#FAFAFA", "#B0A8A0", "#5A5A5A", "#1A1A1A"], // white · ash · charcoal · black
+  "1d": ["#F0EBE3", "#A8A090", "#6A7A8A", "#3A3A3A"], // cream · warm grey · dusty blue · stone
+  "2a": ["#F5EFE4", "#1A2A5A", "#6B1E2E", "#C8A87A"], // ecru · breton navy · burgundy · camel
+  "2b": ["#1A2A5A", "#FAFAFA", "#2A5A3A", "#6B1E2E"], // navy · white · hunter · burgundy
+  "2c": ["#C8A87A", "#F5EFE4", "#A0A0A0", "#2A1A1A"], // camel · cream · grey · warm black
+  "2d": ["#3A5A2A", "#8B2020", "#C8A87A", "#8A8A7A"], // forest · oxblood · camel · grey
+  "3a": ["#3A3A3A", "#FAFAFA", "#C8A87A", "#1A2A5A"], // charcoal · white · camel · navy
+  "3b": ["#1A1A1A", "#FAFAFA", "#6B1E2E", "#7A8A9A"], // black · white · burgundy · steel
+  "3c": ["#8A7A6A", "#C8A87A", "#C89A88", "#D4C9B2"], // stone · camel · dusty rose · oat
+  "4a": ["#E8C4B8", "#C89A88", "#A888B8", "#F5EFE4"], // blush · dusty rose · lavender · cream
+  "4b": ["#5A1A5A", "#1A1A1A", "#6B1E2E", "#2A3A2A"], // deep plum · black · burgundy · forest
+  "4c": ["#F07090", "#D0A0D0", "#FAFAFA", "#F5C0C8"], // bubblegum · lilac · white · blush
+  "4d": ["#D4AE4A", "#2A6A3A", "#1A1A1A", "#F5EFE4"], // champagne · emerald · black · cream
+  "5a": ["#C85A2A", "#C8A020", "#B86A4A", "#F0E8D0"], // rust · mustard · terracotta · cream
+  "5b": ["#C86040", "#2A3A8A", "#D4A040", "#7A4A2A"], // terracotta · indigo · saffron · earth
+  "5c": ["#E87040", "#E85060", "#3A9A9A", "#E8C040"], // orange · coral · turquoise · yellow
+  "6a": ["#8AAABB", "#FAFAFA", "#D4C9B2", "#7A9A8A"], // soft blue · white · linen · sage
+  "6b": ["#7A9A6A", "#6A7A3A", "#D4C9B2", "#C07040"], // sage · olive · oat · terracotta
+  "6c": ["#5A7AA0", "#FAFAFA", "#C04040", "#B8986A"], // denim · white · faded red · tan
+  "7a": ["#FAFAFA", "#A0A0A0", "#F0C0C0", "#1A1A1A"], // white · grey · blush · black
+  "7b": ["#1A1A1A", "#3A3A3A", "#4A5A2A", "#2A5A9A"], // black · dark grey · olive · electric blue
+  "7c": ["#3A9A3A", "#FAFAFA", "#1A2A5A", "#E8D000"], // kelly · white · navy · yellow
+  "8a": ["#1A2A5A", "#C8A87A", "#F5EFE4", "#2A5A3A"], // navy · camel · cream · hunter
+  "8b": ["#8B2020", "#4A2A10", "#F0E8D0", "#2A3A2A"], // oxblood · deep brown · cream · forest
+  "8c": ["#C83030", "#FAFAFA", "#1A2A5A", "#E8C000"], // red · white · navy · yellow
+  "9a": ["#C8A020", "#C85A2A", "#E87030", "#F0E8D0"], // mustard · rust · burnt orange · cream
+  "9b": ["#D4B898", "#C0A888", "#F5EFE4", "#9A9080"], // nude · beige · ivory · dove grey
+  "9c": ["#F07090", "#C0C8D0", "#FAFAFA", "#C0A0D0"], // bubblegum · silver · white · lavender
+  "9d": ["#C82020", "#1A1A1A", "#FAFAFA", "#1A2A5A"], // cherry red · black · white · navy
+  "10a":["#1A1A1A", "#2A2A2A", "#6A6A6A", "#5A1A2A"], // black · charcoal · grey · wine
+  "10b":["#C82020", "#2A2A2A", "#B0B8C0", "#3A1A1A"], // tartan red · black · silver · dark
+  "10c":["#1A1A1A", "#B0B8C0", "#5A5A5A", "#F0E8D0"], // black leather · silver · grey · off-white
+  "10d":["#FAFAFA", "#1A1A1A", "#D4C8B0", "#7A7A7A"], // white · black · raw ecru · grey
+  "11a":["#F0E8D0", "#9A8A78", "#1A1A1A", "#C8A87A"], // cream · stone · black · camel
+  "11b":["#1A1A1A", "#5A5A5A", "#F0E8D0", "#E87030"], // black · grey · off-white · orange
+  "11c":["#FAFAFA", "#7A7A7A", "#2A4AA0", "#40B040"], // white · grey · royal blue · electric green
+};
+
 export const ARCHETYPES: Record<ArchetypeCode, ArchetypeData> = {
   "1a": { name: "Scandi Minimalist",    family: "Minimalist", desc: "Relaxed, oat/stone/navy, thrown-on precision",              c: "#7A8B9A" },
   "1b": { name: "Quiet Luxury",         family: "Minimalist", desc: "Architectural cashmere, exact proportions",                  c: "#9B8B76" },

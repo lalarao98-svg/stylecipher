@@ -1,6 +1,6 @@
 "use client";
 import { useStyleStore } from "@/store/useStyleStore";
-import { KIBBE, SEASONS, ARCHETYPES, BRANDS, DEFAULT_BRANDS, SFAM } from "@/lib/data";
+import { KIBBE, SEASONS, ARCHETYPES, ARCHETYPE_PAL, BRANDS, DEFAULT_BRANDS, SFAM } from "@/lib/data";
 import type { ArchetypeCode } from "@/lib/types";
 import PaletteDisplay from "@/components/shared/PaletteDisplay";
 import WeightBar from "@/components/shared/WeightBar";
@@ -192,15 +192,20 @@ export default function GuidePage() {
                 const wt = archWeights[code] ?? 0;
                 return (
                   <div key={code} style={{ display: "flex", gap: 32 }}>
-                    <div style={{ width: 180, height: 240, flexShrink: 0, overflow: "hidden", border: `1px solid ${arch.c}30`, background: `linear-gradient(160deg, ${arch.c}12 0%, ${arch.c}35 100%)`, position: "relative", display: "flex", alignItems: "flex-end", padding: "16px 14px" }}>
-                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: arch.c, opacity: 0.7 }} />
-                      <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 120, fontWeight: 700, fontStyle: "italic", color: arch.c, opacity: 0.15, lineHeight: 1, position: "absolute", bottom: -16, right: -4, pointerEvents: "none" }}>
-                        {arch.family[0]}
-                      </span>
-                      <div style={{ background: "rgba(34,21,22,0.72)", padding: "3px 8px" }}>
-                        <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", fontWeight: 300, color: "#F5EFE4" }}>
-                          #{rank + 1}
-                        </span>
+                    {/* Palette card */}
+                    <div style={{ width: 180, flexShrink: 0, overflow: "hidden", border: `1px solid ${arch.c}30`, display: "flex", flexDirection: "column" }}>
+                      <div style={{ display: "flex", height: 160 }}>
+                        {(ARCHETYPE_PAL[code] ?? [arch.c, arch.c, arch.c, arch.c]).map((col, i) => (
+                          <div key={i} style={{ flex: 1, background: col }} />
+                        ))}
+                      </div>
+                      <div style={{ padding: "10px 12px", background: "#FFFFFF", borderTop: `2px solid ${arch.c}` }}>
+                        <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 8, fontWeight: 300, letterSpacing: "0.14em", textTransform: "uppercase", color: arch.c, marginBottom: 2 }}>
+                          #{rank + 1} · {arch.family}
+                        </p>
+                        <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 14, fontWeight: 600, color: "#221516", lineHeight: 1.2 }}>
+                          {arch.name}
+                        </p>
                       </div>
                     </div>
                     <div style={{ flex: 1, paddingTop: 4 }}>

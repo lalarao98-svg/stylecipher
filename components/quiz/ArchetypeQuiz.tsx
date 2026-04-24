@@ -87,7 +87,7 @@ export default function ArchetypeQuiz({ onDone }: { onDone: () => void }) {
                 code={code}
                 name={arch.name}
                 family={arch.family}
-
+                desc={arch.desc}
                 accentColor={arch.c}
                 showWeight={archWeights[code] ?? 0}
                 onClick={() => handleManualSelect(code)}
