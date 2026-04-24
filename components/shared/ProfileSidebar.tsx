@@ -21,21 +21,21 @@ export default function ProfileSidebar() {
     <aside style={{
       width: 220,
       flexShrink: 0,
-      borderLeft: "1px solid rgba(200,184,152,0.1)",
+      borderLeft: "1px solid rgba(138,122,104,0.18)",
       overflowY: "auto",
       display: "flex",
       flexDirection: "column",
-      background: "#0E0B0A",
+      background: "#EDE4D6",
     }}>
       {/* Header */}
-      <div style={{ padding: "20px 18px 14px", borderBottom: "1px solid rgba(200,184,152,0.08)" }}>
+      <div style={{ padding: "20px 18px 14px", borderBottom: "1px solid rgba(138,122,104,0.12)" }}>
         <p style={{
           fontFamily: "'Cormorant Garamond', Georgia, serif",
           fontSize: 11,
           fontWeight: 400,
           fontStyle: "italic",
           letterSpacing: "0.12em",
-          color: "rgba(200,184,152,0.4)",
+          color: "rgba(106,90,74,0.55)",
           textTransform: "uppercase",
         }}>
           Your Dossier
@@ -43,8 +43,8 @@ export default function ProfileSidebar() {
       </div>
 
       {/* Kibbe */}
-      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(200,184,152,0.06)" }}>
-        <p className="t-label" style={{ marginBottom: 10, color: "rgba(138,122,104,0.6)" }}>Body Architecture</p>
+      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(138,122,104,0.08)" }}>
+        <p className="t-label" style={{ marginBottom: 10 }}>Body Architecture</p>
         {kibbeData ? (
           <>
             <p style={{
@@ -52,7 +52,7 @@ export default function ProfileSidebar() {
               fontSize: 18,
               fontWeight: 700,
               fontStyle: "italic",
-              color: "#F5EFE4",
+              color: "#221516",
               lineHeight: 1.1,
               marginBottom: 3,
             }}>
@@ -69,17 +69,17 @@ export default function ProfileSidebar() {
                     alt={s.n}
                     fill
                     sizes="90px"
-                    style={{ objectFit: "cover", filter: "saturate(0.5) brightness(0.7)" }}
+                    style={{ objectFit: "cover", filter: "saturate(0.6) brightness(0.9)" }}
                   />
                   <div style={{
                     position: "absolute",
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    background: "linear-gradient(transparent, rgba(14,11,10,0.85))",
+                    background: "linear-gradient(transparent, rgba(34,21,22,0.7))",
                     padding: "3px 4px",
                   }}>
-                    <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 7, fontWeight: 300, letterSpacing: "0.08em", color: "#C8B898" }}>
+                    <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 7, fontWeight: 300, letterSpacing: "0.08em", color: "#F5EFE4" }}>
                       {s.n}
                     </span>
                   </div>
@@ -88,15 +88,15 @@ export default function ProfileSidebar() {
             </div>
           </>
         ) : (
-          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.4)" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.5)" }}>
             Pending analysis
           </p>
         )}
       </div>
 
       {/* Season */}
-      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(200,184,152,0.06)" }}>
-        <p className="t-label" style={{ marginBottom: 10, color: "rgba(138,122,104,0.6)" }}>Colour Season</p>
+      <div style={{ padding: "18px 18px 16px", borderBottom: "1px solid rgba(138,122,104,0.08)" }}>
+        <p className="t-label" style={{ marginBottom: 10 }}>Colour Season</p>
         {seasonData ? (
           <>
             <p style={{
@@ -104,7 +104,7 @@ export default function ProfileSidebar() {
               fontSize: 16,
               fontWeight: 600,
               fontStyle: "italic",
-              color: "#F5EFE4",
+              color: "#221516",
               marginBottom: 2,
             }}>
               {seasonData.label}
@@ -115,7 +115,7 @@ export default function ProfileSidebar() {
             <PaletteDisplay pal={seasonData.pal} neut={seasonData.neut} />
           </>
         ) : (
-          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.4)" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.5)" }}>
             Pending analysis
           </p>
         )}
@@ -123,7 +123,7 @@ export default function ProfileSidebar() {
 
       {/* Archetypes */}
       <div style={{ padding: "18px 18px 24px" }}>
-        <p className="t-label" style={{ marginBottom: 14, color: "rgba(138,122,104,0.6)" }}>Top Archetypes</p>
+        <p className="t-label" style={{ marginBottom: 14 }}>Top Archetypes</p>
         {top3.length > 0 ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {top3.map(({ code, wt }) => {
@@ -138,14 +138,14 @@ export default function ProfileSidebar() {
                         alt={arch.name}
                         fill
                         sizes="28px"
-                        style={{ objectFit: "cover", filter: "saturate(0.6) brightness(0.8)" }}
+                        style={{ objectFit: "cover", filter: "saturate(0.7) brightness(0.9)" }}
                       />
                     </div>
                     <div>
-                      <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontWeight: 600, color: "#C8B898", lineHeight: 1.1 }}>
+                      <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontWeight: 600, color: "#221516", lineHeight: 1.1 }}>
                         {arch.name}
                       </p>
-                      <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 8, fontWeight: 300, color: "rgba(138,122,104,0.7)", letterSpacing: "0.08em" }}>
+                      <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 8, fontWeight: 300, color: "#8A7A68", letterSpacing: "0.08em" }}>
                         {arch.family}
                       </p>
                     </div>
@@ -156,7 +156,7 @@ export default function ProfileSidebar() {
             })}
           </div>
         ) : (
-          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.4)" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 13, fontStyle: "italic", color: "rgba(138,122,104,0.5)" }}>
             Pending analysis
           </p>
         )}

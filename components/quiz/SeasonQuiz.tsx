@@ -37,18 +37,16 @@ export default function SeasonQuiz({ onDone }: { onDone: () => void }) {
     const data = SEASONS[showResult];
     return (
       <div className="fade-up" style={{ padding: "40px 56px", maxWidth: 640 }}>
-        <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(200,184,152,0.45)", marginBottom: 16 }}>
-          Your Colour Season
-        </p>
+        <p className="t-label" style={{ marginBottom: 16 }}>Your Colour Season</p>
         <div style={{ width: 48, height: 1, background: "#4A6B8A", marginBottom: 28 }} />
         <div style={{ display: "flex", gap: 40, alignItems: "flex-start", marginBottom: 32 }}>
           <div style={{ flex: 1 }}>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 52, fontWeight: 700, fontStyle: "italic", color: "#F5EFE4", lineHeight: 0.88, marginBottom: 8 }}>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 52, fontWeight: 700, fontStyle: "italic", color: "#221516", lineHeight: 0.88, marginBottom: 8 }}>
               {data.label}
             </h2>
             <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 17, fontStyle: "italic", color: "#8A7A68", marginBottom: 20 }}>{data.sub}</p>
-            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 13, fontWeight: 300, color: "rgba(138,122,104,0.7)", lineHeight: 1.8, marginBottom: 10 }}>{data.desc}</p>
-            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 300, color: "rgba(138,122,104,0.6)", lineHeight: 1.7 }}>Metals: {data.metals}</p>
+            <p className="t-body" style={{ marginBottom: 10 }}>{data.desc}</p>
+            <p className="t-body">Metals: {data.metals}</p>
           </div>
           <div style={{ width: 180, flexShrink: 0 }}>
             <PaletteDisplay pal={data.pal} neut={data.neut} />
@@ -56,10 +54,10 @@ export default function SeasonQuiz({ onDone }: { onDone: () => void }) {
         </div>
         <div style={{ display: "flex", gap: 12, marginBottom: 32 }}>
           <button className="btn-primary" onClick={() => confirmResult(showResult)}>Confirm Season</button>
-          <button className="btn-ghost" onClick={() => { setShowResult(null); setSeasonStep(0); setSeasonScores({}); }}>Retake</button>
+          <button className="btn-ghost-dark" onClick={() => { setShowResult(null); setSeasonStep(0); setSeasonScores({}); }}>Retake</button>
         </div>
-        <div style={{ width: "100%", height: 1, background: "rgba(200,184,152,0.08)", marginBottom: 24 }} />
-        <p className="t-label" style={{ marginBottom: 10, color: "rgba(138,122,104,0.5)" }}>Or choose manually</p>
+        <div style={{ width: "100%", height: 1, background: "rgba(138,122,104,0.15)", marginBottom: 24 }} />
+        <p className="t-label" style={{ marginBottom: 10 }}>Or choose manually</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {ALL_SEASONS.map((s) => (
             <button key={s} className={`chip${selS === s ? " on" : ""}`} onClick={() => confirmResult(s)}>
@@ -75,17 +73,17 @@ export default function SeasonQuiz({ onDone }: { onDone: () => void }) {
     <div style={{ padding: "40px 56px", maxWidth: 640 }}>
       <div style={{ display: "flex", gap: 2, marginBottom: 28 }}>
         {SQ.map((_, i) => (
-          <div key={i} className="prog-seg" style={{ background: i <= seasonStep ? "#4A6B8A" : "rgba(200,184,152,0.12)" }} />
+          <div key={i} className="prog-seg" style={{ background: i <= seasonStep ? "#4A6B8A" : "rgba(138,122,104,0.15)" }} />
         ))}
       </div>
 
-      <p className="t-label" style={{ marginBottom: 8, color: "rgba(200,184,152,0.45)" }}>
+      <p className="t-label" style={{ marginBottom: 8 }}>
         Colour Analysis · {seasonStep + 1} of {SQ.length}
       </p>
 
       <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 32 }}>
         <span className="sec-num">{String(seasonStep + 1).padStart(2, "0")}</span>
-        <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 600, color: "#F5EFE4", lineHeight: 1.2, paddingTop: 8 }}>
+        <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 600, color: "#221516", lineHeight: 1.2, paddingTop: 8 }}>
           {question.q}
         </h3>
       </div>

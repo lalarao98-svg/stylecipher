@@ -15,7 +15,7 @@ const FILTER_ROW: React.CSSProperties = {
   alignItems: "center",
   gap: 8,
   padding: "10px 0",
-  borderBottom: "1px solid rgba(200,184,152,0.06)",
+  borderBottom: "1px solid rgba(138,122,104,0.1)",
 };
 
 const LABEL_W: React.CSSProperties = {
@@ -26,7 +26,7 @@ const LABEL_W: React.CSSProperties = {
   fontWeight: 300,
   letterSpacing: "0.14em",
   textTransform: "uppercase",
-  color: "rgba(200,184,152,0.4)",
+  color: "#8A7A68",
 };
 
 export default function StyleMePage() {
@@ -92,10 +92,10 @@ export default function StyleMePage() {
   }
 
   return (
-    <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
+    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F5EFE4" }}>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        {/* Filters bar */}
-        <div style={{ borderBottom: "1px solid rgba(200,184,152,0.08)", padding: "0 32px", flexShrink: 0, background: "#0E0B0A" }}>
+        {/* Filters */}
+        <div style={{ borderBottom: "1px solid rgba(138,122,104,0.15)", padding: "0 32px", flexShrink: 0, background: "#EDE4D6" }}>
           <div style={FILTER_ROW}>
             <p style={LABEL_W}>Platform</p>
             {PLATFORMS.map((p) => (
@@ -114,7 +114,7 @@ export default function StyleMePage() {
             ))}
           </div>
 
-          <div style={{ ...FILTER_ROW, flexWrap: "wrap", borderBottom: platform === "Depop" ? "1px solid rgba(200,184,152,0.06)" : "none" }}>
+          <div style={{ ...FILTER_ROW, flexWrap: "wrap", borderBottom: platform === "Depop" ? "1px solid rgba(138,122,104,0.1)" : "none" }}>
             <p style={LABEL_W}>Vibe</p>
             {VIBES.map((v) => (
               <button key={v} className={`vibe-pill${vibes.includes(v) ? " on" : ""}`} onClick={() => toggleVibe(v)}>
@@ -138,7 +138,7 @@ export default function StyleMePage() {
         </div>
 
         {/* Action bar */}
-        <div style={{ padding: "14px 32px", borderBottom: "1px solid rgba(200,184,152,0.08)", display: "flex", alignItems: "center", gap: 16, flexShrink: 0, background: "#0E0B0A" }}>
+        <div style={{ padding: "14px 32px", borderBottom: "1px solid rgba(138,122,104,0.12)", display: "flex", alignItems: "center", gap: 16, flexShrink: 0, background: "#F5EFE4" }}>
           <button
             className="btn-primary"
             onClick={handleStyleMe}
@@ -147,24 +147,22 @@ export default function StyleMePage() {
             {loading ? (platform === "Depop" ? "Fetching listings…" : "Searching…") : "Style Me"}
           </button>
           {!selK && !selS && (
-            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 300, color: "rgba(138,122,104,0.6)" }}>
-              Complete your profile on <a href="/" style={{ color: "#B8962E", textDecoration: "none", borderBottom: "1px solid rgba(184,150,46,0.4)" }}>Decode</a> first.
+            <p className="t-body">
+              Complete your profile on <a href="/" style={{ color: "#3B0510", textDecoration: "none", borderBottom: "1px solid rgba(59,5,16,0.3)" }}>Decode</a> first.
             </p>
           )}
-          {error && <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 300, color: "#9B2A2A" }}>{error}</p>}
+          {error && <p className="t-body" style={{ color: "#9B2A2A" }}>{error}</p>}
         </div>
 
         {/* Results */}
         <div style={{ flex: 1, overflowY: "auto", padding: "32px 32px" }}>
           {latestResults.length === 0 && !loading && (
             <div style={{ textAlign: "center", paddingTop: 80 }}>
-              <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 300, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(200,184,152,0.35)", marginBottom: 20 }}>
-                No results yet
-              </p>
-              <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 44, fontWeight: 700, fontStyle: "italic", color: "#F5EFE4", lineHeight: 0.88, marginBottom: 20 }}>
+              <p className="t-label" style={{ marginBottom: 20 }}>No results yet</p>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 44, fontWeight: 700, fontStyle: "italic", color: "#221516", lineHeight: 0.88, marginBottom: 20 }}>
                 Ready to Style You
               </h2>
-              <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 13, fontWeight: 300, color: "rgba(138,122,104,0.6)", lineHeight: 1.8, maxWidth: 360, margin: "0 auto" }}>
+              <p className="t-body" style={{ maxWidth: 360, margin: "0 auto" }}>
                 Set your filters and click Style Me to get personalised picks curated for your body type, colour season, and archetypes.
               </p>
             </div>
@@ -192,7 +190,7 @@ function ResultCard({ item }: { item: StyleMeResult }) {
   return (
     <div className="result-card" style={{ padding: "18px 18px 22px", display: "flex", flexDirection: "column", gap: 8 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-        <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 9, fontWeight: 300, letterSpacing: "0.14em", textTransform: "uppercase", color: "#8A7A68" }}>{item.platform}</p>
+        <p className="t-label">{item.platform}</p>
         <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 16, fontWeight: 700, fontStyle: "italic", color: "#4A6B8A" }}>
           {item.price}
         </p>
@@ -200,13 +198,9 @@ function ResultCard({ item }: { item: StyleMeResult }) {
       <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 18, fontWeight: 600, color: "#221516", lineHeight: 1.2 }}>
         {item.name}
       </p>
-      <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 300, color: "#6A5A4A" }}>{item.brand}</p>
-      {item.era && (
-        <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 11, fontWeight: 300, color: "#A87828", fontStyle: "italic" }}>{item.era}</p>
-      )}
-      <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 300, color: "#8A7A68", fontStyle: "italic", lineHeight: 1.7, marginTop: 4 }}>
-        {item.match}
-      </p>
+      <p className="t-body">{item.brand}</p>
+      {item.era && <p className="t-body" style={{ color: "#A87828", fontStyle: "italic" }}>{item.era}</p>}
+      <p className="t-body" style={{ marginTop: 4, fontStyle: "italic" }}>{item.match}</p>
       {item.search_query && (
         <p style={{ fontFamily: "monospace", fontSize: 10, color: "#5A6012", wordBreak: "break-all", marginTop: 4 }}>
           &ldquo;{item.search_query}&rdquo;

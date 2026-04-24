@@ -2,9 +2,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink:        #0E0B0A;
-  --color-espresso:   #1A1210;
-  --color-mahogany:   #221516;
+  --color-ink:        #1A1210;
+  --color-espresso:   #221516;
+  --color-mahogany:   #3A2020;
   --color-burgundy:   #3B0510;
   --color-wine:       #6B1E2E;
   --color-parchment:  #F5EFE4;
@@ -23,11 +23,11 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
+html, body { height: 100%; overflow: hidden; background: #F5EFE4; }
 
 ::-webkit-scrollbar { width: 2px; height: 2px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #3B0510; border-radius: 1px; }
+::-webkit-scrollbar-thumb { background: rgba(59,5,16,0.3); border-radius: 1px; }
 
 /* ─── Typography ─────────────────────────────── */
 .t-label {
@@ -65,13 +65,13 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   font-weight: 700;
   font-style: italic;
   line-height: 0.9;
-  color: #F5EFE4;
+  color: #221516;
 }
 .t-subhead {
   font-family: var(--font-serif);
   font-weight: 400;
   font-style: italic;
-  color: #C8B898;
+  color: #6A5A4A;
 }
 .sec-num {
   font-family: var(--font-serif);
@@ -80,7 +80,7 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   font-size: 72px;
   color: #4A6B8A;
   line-height: 1;
-  opacity: 0.45;
+  opacity: 0.35;
   flex-shrink: 0;
   width: 64px;
   text-align: right;
@@ -104,8 +104,8 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   transition: background 0.25s, color 0.25s;
   text-decoration: none;
 }
-.btn-primary:hover    { background: #F5EFE4; color: #3B0510; }
-.btn-primary:disabled { background: #2A1E1E; color: #5A4A4A; cursor: not-allowed; }
+.btn-primary:hover    { background: #221516; color: #F5EFE4; }
+.btn-primary:disabled { background: rgba(59,5,16,0.2); color: #8A7A68; cursor: not-allowed; }
 
 .btn-ghost {
   display: inline-flex;
@@ -119,7 +119,7 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  border: 1px solid rgba(245,239,228,0.3);
+  border: 1px solid rgba(245,239,228,0.35);
   cursor: pointer;
   transition: all 0.25s;
   text-decoration: none;
@@ -138,7 +138,7 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  border: 1px solid rgba(59,5,16,0.4);
+  border: 1px solid rgba(59,5,16,0.35);
   cursor: pointer;
   transition: all 0.25s;
   text-decoration: none;
@@ -159,19 +159,19 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   text-decoration-color: rgba(138,122,104,0.4);
   transition: color 0.2s, text-decoration-color 0.2s;
 }
-.btn-text:hover { color: #C8B898; text-decoration-color: rgba(200,184,152,0.6); }
+.btn-text:hover { color: #3B0510; text-decoration-color: rgba(59,5,16,0.4); }
 
 /* ─── Interactive elements ───────────────────── */
 .quiz-opt {
   width: 100%;
   padding: 18px 24px;
-  background: rgba(245,239,228,0.03);
-  border: 1px solid rgba(200,184,152,0.15);
+  background: rgba(34,21,22,0.025);
+  border: 1px solid rgba(138,122,104,0.2);
   border-left: 2px solid transparent;
   font-family: var(--font-serif);
   font-size: 17px;
   font-weight: 400;
-  color: #C8B898;
+  color: #6A5A4A;
   text-align: left;
   line-height: 1.4;
   cursor: pointer;
@@ -179,29 +179,29 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
 }
 .quiz-opt:hover {
   border-left-color: #B8962E;
-  background: rgba(184,150,46,0.06);
-  color: #F5EFE4;
+  background: rgba(184,150,46,0.05);
+  color: #221516;
 }
 
 .chip {
   padding: 6px 14px;
-  border: 1px solid rgba(200,184,152,0.25);
+  border: 1px solid rgba(138,122,104,0.28);
   background: transparent;
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 300;
   letter-spacing: 0.05em;
-  color: #8A7A68;
+  color: #6A5A4A;
   cursor: pointer;
   transition: all 0.18s;
   white-space: nowrap;
 }
-.chip:hover { border-color: #C8B898; color: #C8B898; }
+.chip:hover { border-color: #8A7A68; color: #221516; }
 .chip.on    { background: #3B0510; color: #F5EFE4; border-color: #3B0510; }
 
 .chip-light {
   padding: 6px 14px;
-  border: 1px solid rgba(59,5,16,0.2);
+  border: 1px solid rgba(59,5,16,0.18);
   background: transparent;
   font-family: var(--font-sans);
   font-size: 11px;
@@ -216,8 +216,8 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
 .chip-light.on    { background: #3B0510; color: #F5EFE4; border-color: #3B0510; }
 
 .plat-btn {
-  padding: 10px 20px;
-  border: 1px solid rgba(200,184,152,0.2);
+  padding: 8px 18px;
+  border: 1px solid rgba(138,122,104,0.22);
   background: transparent;
   font-family: var(--font-sans);
   font-size: 11px;
@@ -228,12 +228,12 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   cursor: pointer;
   transition: all 0.18s;
 }
-.plat-btn:hover { border-color: #C8B898; color: #C8B898; }
+.plat-btn:hover { border-color: #8A7A68; color: #221516; }
 .plat-btn.on    { background: #3B0510; color: #F5EFE4; border-color: #3B0510; }
 
 .vibe-pill {
-  padding: 9px 18px;
-  border: 1px solid rgba(200,184,152,0.2);
+  padding: 8px 18px;
+  border: 1px solid rgba(138,122,104,0.22);
   background: transparent;
   font-family: var(--font-serif);
   font-size: 15px;
@@ -243,14 +243,14 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   transition: all 0.18s;
 }
 .vibe-pill:hover { border-color: #B8962E; color: #B8962E; }
-.vibe-pill.on    { background: rgba(184,150,46,0.12); color: #B8962E; border-color: #B8962E; }
+.vibe-pill.on    { background: rgba(184,150,46,0.1); color: #B8962E; border-color: #B8962E; }
 
 /* ─── Cards ──────────────────────────────────── */
 .arch-card {
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid rgba(200,184,152,0.15);
+  border: 1px solid rgba(138,122,104,0.2);
   transition: border-color 0.25s, transform 0.25s;
 }
 .arch-card:hover { border-color: rgba(184,150,46,0.5); transform: translateY(-2px); }
@@ -260,19 +260,19 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(transparent, rgba(14,11,10,0.92));
+  background: linear-gradient(transparent, rgba(26,18,16,0.88));
   padding: 28px 10px 9px;
 }
 
 .result-card {
-  background: #F5EFE4;
-  border: 1px solid rgba(200,184,152,0.6);
+  background: #FEFCF9;
+  border: 1px solid rgba(138,122,104,0.2);
   transition: border-color 0.2s, transform 0.2s;
 }
-.result-card:hover { border-color: #C8B898; transform: translateY(-1px); }
+.result-card:hover { border-color: rgba(138,122,104,0.4); transform: translateY(-1px); }
 
 .dossier-card {
-  background: #F5EFE4;
+  background: #FEFCF9;
   border-left: 3px solid #3B0510;
   padding: 28px 32px;
   position: relative;
@@ -287,7 +287,7 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   transition: background 0.4s;
 }
 
-/* ─── Tab nav ────────────────────────────────── */
+/* ─── Tab nav (Header) ───────────────────────── */
 .tab-item {
   padding: 0 24px;
   height: 56px;
@@ -315,16 +315,16 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   width: 100%;
   padding: 12px 16px;
   border: none;
-  border-bottom: 1px solid rgba(200,184,152,0.3);
-  background: rgba(245,239,228,0.04);
+  border-bottom: 1px solid rgba(138,122,104,0.3);
+  background: rgba(34,21,22,0.03);
   font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 300;
-  color: #F5EFE4;
+  color: #221516;
   outline: none;
   transition: border-color 0.2s;
 }
-.meas-input::placeholder { color: rgba(138,122,104,0.6); }
+.meas-input::placeholder { color: rgba(138,122,104,0.55); }
 .meas-input:focus { border-bottom-color: #B8962E; }
 
 /* ─── Animations ─────────────────────────────── */
@@ -364,6 +364,23 @@ html, body { height: 100%; overflow: hidden; background: #0E0B0A; }
   inset: 0;
   opacity: 0;
   transition: opacity 0.3s;
-  background: rgba(184,150,46,0.04);
+  background: rgba(59,5,16,0.03);
 }
 .gate-box:hover::after { opacity: 1; }
+
+/* ─── Step strip ─────────────────────────────── */
+.step-tab {
+  flex: 1;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+.step-tab:hover { background: rgba(34,21,22,0.025); }
+.step-tab.on    { background: #F5EFE4; }
