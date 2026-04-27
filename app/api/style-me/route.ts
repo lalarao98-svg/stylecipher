@@ -3,6 +3,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { WebSearchTool20260209, TextBlockParam } from "@anthropic-ai/sdk/resources/messages/messages.js";
 import { KIBBE } from "@/lib/data/kibbe";
 import { SEASONS } from "@/lib/data/seasons";
+
+export const maxDuration = 60;
 import type { KibbeType, SeasonKey, Platform, Category, StyleMeResult } from "@/lib/types";
 
 const anthropic = new Anthropic({

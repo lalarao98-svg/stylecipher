@@ -712,7 +712,8 @@ export default function App(){
         setResults(Array.isArray(data)?data:[{name:"Error",brand:"",platform:"",price:"",match:JSON.stringify(data).slice(0,200),url:""}]);
       }
     }catch(e){
-      setResults([{name:"Error",brand:"",platform:"",price:"",match:"Connection failed.",url:""}]);
+      const msg=e instanceof Error?e.message:String(e);
+      setResults([{name:"Error",brand:"",platform:"",price:"",match:`Connection failed: ${msg}`,url:""}]);
     }
     setSearching(false);
   }
