@@ -107,8 +107,10 @@ export interface StyleMeResult {
   price:        string;
   match:        string;
   url?:         string;
-  search_query?: string; // Depop only
-  era?:         string;  // Depop vintage
+  image?:       string;
+  type?:        "rent" | "buy";
+  search_query?: string;
+  era?:         string;
 }
 
 /* ── Depop API ── */

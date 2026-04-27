@@ -26,12 +26,19 @@ interface RequestBody {
   inspoMode?:  boolean;
 }
 
-function searchUrl(platform: string, name: string, brand: string): string {
-  const q = encodeURIComponent(`${brand} ${name}`.trim());
-  if (platform === "RTR" || platform === "Rent the Runway") return `https://www.renttherunway.com/search#/?keyword=${q}`;
-  if (platform === "Nuuly") return `https://nuuly.com/search?q=${q}`;
-  if (platform === "FashionPass") return `https://www.fashionpass.com/search?q=${q}`;
-  return "";
+async function fetchOgImage(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; StyleCipher/1.0)" },
+      signal: AbortSignal.timeout(4000),
+    });
+    const html = await res.text();
+    const m = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/i)
+           ?? html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/i);
+    return m?.[1] ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -44,30 +51,73 @@ export async function POST(req: NextRequest) {
 
   const k = kibbeType ? KIBBE[kibbeType] : null;
   const s = colorSeason ? SEASONS[colorSeason] : null;
-  const isDepop = platform === "Depop";
   const vibeStr = vibes.join(", ");
 
-  const profileCtx = [
-    k ? `BODY TYPE: ${kibbeType} (${k.short}) — ${k.desc}\nSilhouettes: ${k.sil.map((x) => x.n).join(", ")}\nFabrics: ${k.fab.join(", ")}\nNecklines: ${k.neck.join(", ")}\nAvoid: ${k.avoid.join(", ")}` : "",
-    s ? `COLOUR SEASON: ${s.label} (${s.sub})\nBest colours: ${s.pal.slice(0, 5).join(", ")}\nAvoid: ${s.avoid}` : "",
-    archetypes.length > 0 ? `STYLE ARCHETYPES: ${archetypes.join(", ")}` : "",
-    category !== "all" ? `CATEGORY: ${category}` : "",
-    vibeStr ? `VIBE: ${vibeStr}` : "",
-  ].filter(Boolean).join("\n\n");
+  const kibbeBlock = k
+    ? `KIBBE BODY TYPE: ${kibbeType} (${k.short})
+${k.desc}
+Correct silhouettes: ${k.sil.map((x) => x.n).join(", ")}
+Best fabrics: ${k.fab.join(", ")}
+Best necklines: ${k.neck.join(", ")}
+AVOID: ${k.avoid.join(", ")}`
+    : "No Kibbe type set — recommend universally flattering cuts.";
 
-  const systemParts = isDepop ? [
-    "You are an expert vintage stylist. Use web_search to find 8 REAL active Depop listings right now.",
-    profileCtx,
-    `Size: ${depopSize ?? "S"} US — search one size up for vintage.\nSearch with queries like: site:depop.com vintage [style] [item] size [size]`,
-    `Return JSON only — no markdown:\n[{"name":"exact listing title","brand":"seller/brand","platform":"Depop","price":"listed price","match":"why it works","url":"https://www.depop.com/products/...","search_query":"query used","era":"decade"}]`,
-  ] : [
-    "You are an expert personal stylist. Recommend 8 specific items available on Rent the Runway, Nuuly, or FashionPass. Use your knowledge of their current inventory — real brands and styles they actually carry.",
-    profileCtx,
-    `Return JSON only — no markdown:\n[{"name":"item name","brand":"brand name","platform":"RTR|Nuuly|FashionPass","price":"rental price e.g. $30/4 days","match":"why it works for this profile"}]`,
-  ];
+  const seasonBlock = s
+    ? `COLOUR SEASON: ${s.label} (${s.sub})
+${s.desc}
+Best colours: ${s.pal.join(", ")}
+Neutrals: ${s.neut.join(", ")}
+Best metals: ${s.metals}
+AVOID: ${s.avoid}`
+    : "No colour season set — use versatile neutrals.";
+
+  const archetypeBlock = archetypes.length > 0
+    ? `STYLE ARCHETYPES (dominant first): ${archetypes.join(", ")}
+All pieces should feel authentic to the ${archetypes[0]} aesthetic while respecting Kibbe silhouette rules.`
+    : "No archetypes set — use classic, versatile styling.";
+
+  const filters = [
+    platform !== "all" && platform === "Depop"
+      ? `FOCUS: Depop only. Size ${depopSize ?? "S"} US — search one size up for vintage.`
+      : platform !== "all"
+      ? `FOCUS: ${platform} only.`
+      : "",
+    category !== "all" ? `CATEGORY: ${category} only.` : "",
+    vibeStr ? `OCCASION / VIBE: ${vibeStr}` : "",
+  ].filter(Boolean).join("\n");
+
+  const systemPrompt = `You are an expert personal stylist with access to real-time web search. Your job is to find actual purchasable products — from anywhere on the web — that perfectly match this client's profile. Search broadly: rental platforms (Rent the Runway, Nuuly, FashionPass, Depop), luxury retailers (Net-a-Porter, Matches, Ssense, Farfetch), brand sites (Sandro, Maje, Ba&sh, Isabel Marant, etc.), and boutique e-commerce. Prioritise pieces that are currently available and purchasable.
+
+CLIENT PROFILE:
+${kibbeBlock}
+
+${seasonBlock}
+
+${archetypeBlock}
+${filters ? `\n${filters}` : ""}
+
+SEARCH INSTRUCTIONS:
+Search for specific real products. For each piece:
+- Currently available on a real product page (not sold out if possible)
+- Matches the client's Kibbe silhouette rules
+- Works within their colour season palette or neutrals
+- Aligns with their top archetype aesthetic
+- Mix of accessible and investment price points
+- Include rental options where available
+
+Find 8 items. For each, retrieve:
+1. Exact product name
+2. Brand
+3. Retailer/platform
+4. Direct product page URL (specific product page — not category)
+5. Price or rental price
+6. Stylist note explaining why it works for their Kibbe type, colour season, and archetype — be specific
+
+Return ONLY a valid JSON array, no markdown, no preamble:
+[{"name":"exact product name","brand":"brand","platform":"retailer","price":"price","url":"https://exact-product-url","match":"specific stylist note","type":"rent or buy"}]`;
 
   const system: TextBlockParam[] = [
-    { type: "text", text: systemParts.filter(Boolean).join("\n\n"), cache_control: { type: "ephemeral" } },
+    { type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } },
   ];
 
   let messages: Anthropic.MessageParam[];
@@ -79,7 +129,7 @@ export async function POST(req: NextRequest) {
         role: "user",
         content: [
           { type: "image", source: { type: "base64", media_type: "image/jpeg", data: b64 } },
-          { type: "text", text: isDepop ? "Find Depop listings matching this aesthetic for my profile. Use web_search. Return JSON only." : "Recommend rental pieces matching this aesthetic for my profile. Return JSON only." },
+          { type: "text", text: "Find purchasable products matching this aesthetic, perfectly adapted for my Kibbe type, colour season, and archetypes. Use web search to find real current listings. Return JSON only." },
         ],
       },
     ];
@@ -87,32 +137,27 @@ export async function POST(req: NextRequest) {
     messages = [
       {
         role: "user",
-        content: isDepop
-          ? `Search Depop for ${category !== "all" ? category.toLowerCase() : "clothing"}${vibeStr ? ` with ${vibeStr} aesthetic` : ""}${archetypes.length > 0 ? `, ${archetypes[0]} style` : ""}. Use web_search with site:depop.com to find 8 real active listings. Return JSON only.`
-          : `Recommend 8 rental pieces${category !== "all" ? ` (${category.toLowerCase()})` : ""}${vibeStr ? ` for ${vibeStr}` : ""} from RTR, Nuuly, or FashionPass. Return JSON only.`,
+        content: `Search for and find 8 real purchasable products${category !== "all" ? ` (${category.toLowerCase()})` : ""}${vibeStr ? ` for ${vibeStr}` : ""} that perfectly match my profile. Use web search to find actual current product pages with real URLs. Return JSON only.`,
       },
     ];
   }
 
   try {
-    // Depop needs web search; rental platforms don't
-    const useSearch = isDepop || (inspoMode && !!inspoImage);
-
     let response = await anthropic.messages.create({
-      model:      useSearch ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001",
-      max_tokens: 2000,
+      model:      "claude-sonnet-4-6",
+      max_tokens: 2500,
       system,
-      tools:      useSearch ? [WEB_SEARCH] : [],
+      tools:      [WEB_SEARCH],
       messages,
     });
 
     let iterations = 0;
-    while (response.stop_reason === "pause_turn" && iterations < 3) {
+    while (response.stop_reason === "pause_turn" && iterations < 4) {
       iterations++;
       messages = [...messages, { role: "assistant", content: response.content }];
       response = await anthropic.messages.create({
         model:      "claude-sonnet-4-6",
-        max_tokens: 2000,
+        max_tokens: 2500,
         system,
         tools:      [WEB_SEARCH],
         messages,
@@ -131,13 +176,14 @@ export async function POST(req: NextRequest) {
       results = [{ name: "Results", brand: "", platform: "", price: "", match: text.slice(0, 400) }];
     }
 
-    // Add search links for rental platforms that didn't return a url
-    if (!isDepop) {
-      results = results.map((r) => ({
-        ...r,
-        url: r.url || searchUrl(r.platform, r.name, r.brand),
-      }));
-    }
+    // Fetch og:image for each result in parallel (best-effort, 4s timeout each)
+    results = await Promise.all(
+      results.map(async (r) => {
+        if (!r.url?.startsWith("http")) return r;
+        const image = await fetchOgImage(r.url);
+        return image ? { ...r, image } : r;
+      })
+    );
 
     return NextResponse.json(results);
   } catch (err: unknown) {

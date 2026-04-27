@@ -1298,10 +1298,20 @@ export default function App(){
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
                   {results.map((r,i)=>{
                     const pc=r.platform==="RTR"||r.platform==="Rent the Runway"?C.burgundy:r.platform==="Nuuly"?C.olive:r.platform==="Depop"?C.wine:C.blue;
+                    const isRent=r.type==="rent"||r.platform==="RTR"||r.platform==="Rent the Runway"||r.platform==="Nuuly"||r.platform==="FashionPass"||r.platform==="Depop";
                     return(
-                      <div key={i} className="result-card">
-                        <div style={{height:3,background:pc}}/>
-                        <div style={{padding:"14px 16px"}}>
+                      <div key={i} className="result-card" style={{display:"flex",flexDirection:"column"}}>
+                        {r.image?(
+                          <div style={{position:"relative",height:200,overflow:"hidden",flexShrink:0}}>
+                            <img src={r.image} alt={r.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.currentTarget.parentElement.style.display="none";}}/>
+                            <div style={{position:"absolute",top:8,right:8,background:pc,padding:"2px 8px"}}>
+                              <span style={{fontFamily:SANS,fontSize:7,fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:C.white}}>{isRent?"Rent":"Buy"}</span>
+                            </div>
+                          </div>
+                        ):(
+                          <div style={{height:3,background:pc}}/>
+                        )}
+                        <div style={{padding:"14px 16px",flex:1,display:"flex",flexDirection:"column"}}>
                           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6}}>
                             <div style={{flex:1}}>
                               <div style={{fontFamily:SERIF,fontWeight:600,fontSize:16,color:C.espresso,lineHeight:1.2,marginBottom:2}}>{r.name}</div>
@@ -1309,19 +1319,13 @@ export default function App(){
                             </div>
                             {r.price&&<div style={{fontFamily:SANS,fontSize:13,fontWeight:500,color:C.espresso,marginLeft:10,flexShrink:0}}>{r.price}</div>}
                           </div>
-                          <div style={{fontFamily:SANS,fontWeight:300,fontSize:11,color:C.stone,lineHeight:1.7,marginBottom:r.search_query?8:10}}>{r.match}</div>
-                          {r.search_query&&(
-                            <div style={{background:C.cream,borderLeft:`2px solid ${C.wine}`,padding:"7px 10px",marginBottom:8}}>
-                              <Label style={{color:C.wine,marginBottom:3,fontSize:7}}>Depop Search</Label>
-                              <div style={{fontFamily:"'Courier New',monospace",fontSize:10,color:C.espresso}}>{r.search_query}</div>
-                            </div>
-                          )}
-                          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                          <div style={{fontFamily:SANS,fontWeight:300,fontSize:11,color:C.stone,lineHeight:1.7,marginBottom:10,flex:1}}>{r.match}</div>
+                          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:"auto"}}>
                             <div style={{display:"flex",alignItems:"center",gap:5}}>
                               <div style={{width:5,height:5,borderRadius:"50%",background:pc}}/>
                               <span style={{fontFamily:SANS,fontSize:8,letterSpacing:"0.1em",color:C.taupe}}>{r.platform}</span>
                             </div>
-                            {r.url&&r.url.startsWith("http")&&<a href={r.url} target="_blank" rel="noopener noreferrer" style={{fontFamily:SANS,fontSize:9,letterSpacing:"0.08em",color:C.burgundy,textDecoration:"underline",textUnderlineOffset:"2px"}}>View →</a>}
+                            {r.url&&r.url.startsWith("http")&&<a href={r.url} target="_blank" rel="noopener noreferrer" style={{fontFamily:SANS,fontSize:9,fontWeight:500,letterSpacing:"0.08em",color:C.burgundy,textDecoration:"underline",textUnderlineOffset:"2px"}}>View →</a>}
                           </div>
                         </div>
                       </div>
@@ -1384,22 +1388,41 @@ export default function App(){
               <Rule color={C.blue} thickness={3} style={{width:18}}/>
               <Label>Stylist's Picks · {results.length} items</Label>
             </div>
-            <div style={{display:"flex",flexDirection:"column",gap:8}}>
-              {results.map((r,i)=>(
-                <div key={i} className="result-card" style={{padding:"13px 16px",borderLeft:`3px solid ${r.platform==="RTR"?C.burgundy:r.platform==="Nuuly"?C.olive:C.blue}`}}>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:5}}>
-                    <div>
-                      <div style={{fontFamily:SERIF,fontSize:15,fontWeight:500,color:C.espresso,marginBottom:2}}>{r.name}</div>
-                      <div style={{fontFamily:SANS,fontSize:9,color:C.taupe,letterSpacing:"0.06em"}}>{r.brand}</div>
-                    </div>
-                    <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                      <span style={{fontFamily:SANS,fontSize:8,letterSpacing:"0.1em",color:C.taupe}}>{r.platform}</span>
-                      {r.price&&<span style={{fontFamily:SANS,fontSize:12,fontWeight:500,color:C.espresso}}>{r.price}</span>}
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+              {results.map((r,i)=>{
+                const pc=r.platform==="RTR"||r.platform==="Rent the Runway"?C.burgundy:r.platform==="Nuuly"?C.olive:r.platform==="Depop"?C.wine:C.blue;
+                return(
+                  <div key={i} className="result-card" style={{display:"flex",flexDirection:"column"}}>
+                    {r.image?(
+                      <div style={{position:"relative",height:180,overflow:"hidden",flexShrink:0}}>
+                        <img src={r.image} alt={r.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.currentTarget.parentElement.style.display="none";}}/>
+                        <div style={{position:"absolute",top:8,right:8,background:pc,padding:"2px 8px"}}>
+                          <span style={{fontFamily:SANS,fontSize:7,fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:C.white}}>{r.type==="rent"?"Rent":"Buy"}</span>
+                        </div>
+                      </div>
+                    ):(
+                      <div style={{height:3,background:pc}}/>
+                    )}
+                    <div style={{padding:"12px 14px",flex:1,display:"flex",flexDirection:"column"}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:5}}>
+                        <div style={{flex:1}}>
+                          <div style={{fontFamily:SERIF,fontSize:14,fontWeight:500,color:C.espresso,lineHeight:1.2,marginBottom:2}}>{r.name}</div>
+                          <div style={{fontFamily:SANS,fontSize:9,color:C.taupe,letterSpacing:"0.06em"}}>{r.brand}</div>
+                        </div>
+                        {r.price&&<span style={{fontFamily:SANS,fontSize:12,fontWeight:500,color:C.espresso,marginLeft:8,flexShrink:0}}>{r.price}</span>}
+                      </div>
+                      <div style={{fontFamily:SANS,fontWeight:300,fontSize:11,color:C.stone,lineHeight:1.7,flex:1,marginBottom:8}}>{r.match}</div>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:"auto"}}>
+                        <div style={{display:"flex",alignItems:"center",gap:5}}>
+                          <div style={{width:5,height:5,borderRadius:"50%",background:pc}}/>
+                          <span style={{fontFamily:SANS,fontSize:8,letterSpacing:"0.1em",color:C.taupe}}>{r.platform}</span>
+                        </div>
+                        {r.url&&r.url.startsWith("http")&&<a href={r.url} target="_blank" rel="noopener noreferrer" style={{fontFamily:SANS,fontSize:9,fontWeight:500,letterSpacing:"0.08em",color:C.burgundy,textDecoration:"underline",textUnderlineOffset:"2px"}}>View →</a>}
+                      </div>
                     </div>
                   </div>
-                  <div style={{fontFamily:SANS,fontWeight:300,fontSize:11,color:C.stone,lineHeight:1.7}}>{r.match}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
