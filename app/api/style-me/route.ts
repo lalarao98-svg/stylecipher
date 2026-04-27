@@ -140,10 +140,15 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(results);
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("[style-me]", err);
+    const errMsg = err instanceof Error ? err.message : String(err);
+    const isAuth = errMsg.toLowerCase().includes("auth") || errMsg.includes("401") || errMsg.includes("api_key");
+    const userMsg = isAuth
+      ? "Invalid API key — set ANTHROPIC_API_KEY in .env.local"
+      : `Request failed: ${errMsg.slice(0, 120)}`;
     return NextResponse.json(
-      [{ name: "Error", brand: "", platform: "", price: "", match: "Request failed — please try again." }],
+      [{ name: "Error", brand: "", platform: "", price: "", match: userMsg }],
       { status: 500 },
     );
   }

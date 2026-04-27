@@ -625,7 +625,11 @@ export default function App(){
         })
       });
       const data=await resp.json();
-      setResults(data);
+      if(!resp.ok&&Array.isArray(data)&&data[0]?.match){
+        setResults(data);
+      }else{
+        setResults(Array.isArray(data)?data:[{name:"Error",brand:"",platform:"",price:"",match:JSON.stringify(data).slice(0,200),url:""}]);
+      }
     }catch(e){
       setResults([{name:"Error",brand:"",platform:"",price:"",match:"Connection failed.",url:""}]);
     }
