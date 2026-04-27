@@ -26,21 +26,6 @@ interface RequestBody {
   inspoMode?:  boolean;
 }
 
-async function fetchOgImage(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; StyleCipher/1.0)" },
-      signal: AbortSignal.timeout(4000),
-    });
-    const html = await res.text();
-    const m = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/i)
-           ?? html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/i);
-    return m?.[1] ?? null;
-  } catch {
-    return null;
-  }
-}
-
 export async function POST(req: NextRequest) {
   const body: RequestBody = await req.json();
   const {
@@ -175,15 +160,6 @@ Return ONLY a valid JSON array, no markdown, no preamble:
     } catch {
       results = [{ name: "Results", brand: "", platform: "", price: "", match: text.slice(0, 400) }];
     }
-
-    // Fetch og:image for each result in parallel (best-effort, 4s timeout each)
-    results = await Promise.all(
-      results.map(async (r) => {
-        if (!r.url?.startsWith("http")) return r;
-        const image = await fetchOgImage(r.url);
-        return image ? { ...r, image } : r;
-      })
-    );
 
     return NextResponse.json(results);
   } catch (err: unknown) {
